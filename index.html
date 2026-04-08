@@ -97,9 +97,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .action-btn.primary{background:#7F77DD;color:#fff;border-color:#7F77DD}
 .action-btn.primary:hover{background:#534AB7}
 footer{text-align:center;font-size:11px;color:#bbb;margin-top:1.5rem;padding-top:1rem;border-top:0.5px solid #eee}
+#boot-ov{position:fixed;inset:0;background:#f8f7f4;display:flex;align-items:center;justify-content:center;z-index:200;transition:opacity .5s ease}
+#boot-ov.fade{opacity:0;pointer-events:none}
+.boot-box{text-align:center;padding:2rem}
+.boot-spinner{width:38px;height:38px;border:3px solid #e5e3de;border-top-color:#7F77DD;border-radius:50%;animation:spin .75s linear infinite;margin:0 auto 18px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.boot-icon{font-size:28px;margin-bottom:12px}
+.boot-msg{font-size:15px;font-weight:500;color:#1a1a18;margin-bottom:6px}
+.boot-sub{font-size:12px;color:#aaa;min-height:18px;transition:opacity .3s}
 </style>
 </head>
 <body>
+<div id="boot-ov">
+  <div class="boot-box">
+    <div class="boot-icon">🎌</div>
+    <div class="boot-spinner"></div>
+    <div class="boot-msg" id="boot-msg">Connecting...</div>
+    <div class="boot-sub" id="boot-sub"></div>
+  </div>
+</div>
 <canvas id="confetti-canvas"></canvas>
 <div class="puzzle-overlay" id="puzzle-overlay">
   <svg width="220" height="90" viewBox="0 0 220 90" id="puzzle-svg"></svg>
@@ -330,8 +346,7 @@ function shDn(){clearInterval(tInt);tInt=null;stopBg();document.getElementById('
 async function loadLB(){try{var d=await fetch(API_BASE+'/api/scores');var j=await d.json();lb=j.scores||[];renderLB(-1);}catch(e){renderLB(-1);}}
 async function saveLB(){var n=(document.getElementById('ninp').value.trim()||'???').slice(0,8);try{await apiFetch('/api/scores',{method:'POST',body:JSON.stringify({name:n,correct:cg.cor,errors:cg.err,hints:cg.ht,timeSel:tSel,timeLeft:tLeft,time:cg.time})});document.getElementById('lb-nr').style.display='none';await loadLB();openM('lb');}catch(e){alert('Could not save score.');}}
 function renderLB(mi){var tb=document.getElementById('lbb');tb.innerHTML='';if(!lb.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;color:#aaa;padding:10px">No scores yet!</td></tr>';return;}lb.forEach((e,i)=>{var tr=document.createElement('tr');if(i===mi)tr.className='me';var indE=e.ind?.e||e.ind||'\u2014',indT=e.ind?.t||'';tr.innerHTML='<td>'+(i+1)+'</td><td><b>'+e.name+'</b></td><td>'+e.score+'pts ('+e.correct+'/15)</td><td><span class="ind-tip" title="'+indT+'">'+indE+'</span></td><td>'+(e.time||'\u2014')+'</td>';tb.appendChild(tr);});}
-// BOOT
-(async function(){setF('loading','\u29B3 Connecting...');try{await _startSess();init();}catch(e){setF('err','\u274C Could not connect. Please reload.');console.error(e);}})();
+(async function(){var ov=document.getElementById('boot-ov'),bm=document.getElementById('boot-msg'),bs=document.getElementById('boot-sub');var dots=0,dotsT=setInterval(function(){dots=(dots+1)%4;bs.textContent=String.fromCharCode(183).repeat(dots+1);},400);var warmT=setTimeout(function(){bm.textContent='Warming up server...';bs.textContent='Free tier - first load may take ~30s';clearInterval(dotsT);},5000);function hide(){clearTimeout(warmT);clearInterval(dotsT);ov.classList.add('fade');setTimeout(function(){ov.style.display='none';},500);}try{await _startSess();hide();init();}catch(e){clearTimeout(warmT);clearInterval(dotsT);bm.textContent='Could not connect';bs.textContent='Please reload the page';console.error(e);}})();
 </script>
 </body>
 </html>
