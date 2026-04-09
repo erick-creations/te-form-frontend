@@ -19,8 +19,8 @@ select.tbtn{-webkit-appearance:none;appearance:none;padding:3px 7px}
 .sc{border-radius:8px;padding:8px 5px;text-align:center}
 .sc-g{background:#E1F5EE}.sc-r{background:#FCEBEB}.sc-y{background:#FAEEDA}.sc-b{background:#EAF3DE;cursor:pointer}.sc-b:hover{opacity:.85}.sc-p{background:#EEEDFE}
 .sv{font-size:15px;font-weight:500;color:#1a1a18;display:block}
-.sl{font-size:9px;color:#888}
-.tsel{font-size:9px;background:transparent;border:none;color:#888;cursor:pointer;width:100%;margin-top:1px;text-align:center}
+.sl{font-size:11px;color:#888}
+.tsel{font-size:11px;background:transparent;border:none;color:#888;cursor:pointer;width:100%;margin-top:1px;text-align:center}
 .pb{height:4px;background:#e5e3de;border-radius:2px;margin-bottom:.8rem;overflow:hidden}
 .pf{height:100%;background:#7F77DD;border-radius:2px;transition:width .4s}
 .rrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
@@ -110,7 +110,7 @@ footer{text-align:center;font-size:11px;color:#bbb;margin-top:1.5rem;padding-top
 .rule-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid #eee}
 .rule-end{font-size:14px;font-weight:500;min-width:110px}
 .rule-arr{color:#aaa;font-size:12px}
-.rule-res{font-size:14px;font-weight:500;color:#1D9E75}
+.rule-res{font-size:14px;font-weight:500;color:#1D9E75;white-space:nowrap}
 .rule-note{font-size:10px;color:#aaa;margin-left:4px}
 </style>
 </head>
@@ -395,7 +395,13 @@ function applyLang(){
   });
   document.querySelectorAll('[data-i18n-ph]').forEach(function(el){el.placeholder=t(el.dataset.i18nPh);});
 }
-function setLang(l){curLang=l;localStorage.setItem('te_lang',l);applyLang();}
+function setLang(l){
+  curLang=l;localStorage.setItem('te_lang',l);applyLang();
+  var rl=document.getElementById('rl');if(rl)rl.textContent=t('round').replaceAll('{n}',ri+1);
+  var fb=document.getElementById('fb');if(fb&&fb.classList.contains('idle'))setF('idle',t('select'));
+  document.querySelectorAll('.hb[data-hint="1"]:not(.ud)').forEach(function(b){b.textContent=t('hint1_lbl');});
+  document.querySelectorAll('.hb[data-hint="2"]:not(.ud)').forEach(function(b){b.textContent=t('hint2_lbl');});
+}
 // CONFIG
 const API_BASE=window.API_BASE||'https://te-form-backend.onrender.com';
 // SESSION
@@ -446,26 +452,34 @@ function getInd(){if(err===0&&ht===0&&cor===15)return{e:'\uD83D\uDFE2',t:'\uD83D
 function fmtEl(){if(tSel<=0)return'\u2014';return fmt(Math.max(0,tSel-tLeft));}
 function buildTeRules(){
   var b=document.getElementById('te-rules-body');b.innerHTML='';
-  var groups=[
-    {ends:'る',result:'て',color:'#1D9E75',note:'Group 2 — syllable before る is from い/え row (e.g. たべる、みる、おきる)'},
-    {ends:'う・つ・る ⚠',result:'って',color:'#854F0B',note:'Group 1 — ⚠ る looks like G2 but is G1 (e.g. かう、まつ、かえる)'},
+  var regular=[
+    {ends:'る',result:'て',color:'#1D9E75',note:'Group 2 — syllable before る is い/え row (e.g. たべる、みる、おきる)'},
     {ends:'む・ぶ・ぬ',result:'んで',color:'#1a1a18',note:'Group 1 nasal ending (e.g. のむ、あそぶ、しぬ)'},
-    {ends:'く',result:'いて',color:'#1a1a18',note:'Group 1 (e.g. かく、きく) — exception: いく → いって'},
-    {ends:'いく',result:'いって',color:'#854F0B',note:'⚠ Exception to く rule (to go)'},
+    {ends:'く',result:'いて',color:'#1a1a18',note:'Group 1 (e.g. かく、きく)'},
     {ends:'ぐ',result:'いで',color:'#1a1a18',note:'Group 1 voiced — partner of く (e.g. およぐ、いそぐ)'},
     {ends:'す',result:'して',color:'#1a1a18',note:'Group 1 (e.g. はなす、かす、けす)'},
-    {ends:'する ✦',result:'して',color:'#534AB7',note:'Irregular verb (to do) — also compound verbs: べんきょうする…'},
-    {ends:'くる ✦',result:'きて',color:'#534AB7',note:'Irregular verb (to come) — reading changes: く→き'},
+    {ends:'う・つ',result:'って',color:'#1a1a18',note:'Group 1 (e.g. かう、まつ、つかう)'},
   ];
-  groups.forEach(function(g){
-    var d=document.createElement('div');
-    d.className='rule-row';
+  var special=[
+    {ends:'いく',result:'いって',color:'#854F0B',note:'⚠ Exception to く rule (to go)'},
+    {ends:'る ⚠',result:'って',color:'#854F0B',note:'⚠ Group 1 Special — looks like G2! (e.g. かえる、きる、はしる)'},
+    {ends:'する ✦',result:'して',color:'#534AB7',note:'Irregular (to do) + compound verbs: べんきょうする…'},
+    {ends:'くる ✦',result:'きて',color:'#534AB7',note:'Irregular (to come) — reading changes: く→き'},
+  ];
+  function makeRow(g){
+    var d=document.createElement('div');d.className='rule-row';
     d.innerHTML='<span class="rule-end" style="color:'+g.color+'">'+g.ends+'</span>'
       +'<span class="rule-arr">→</span>'
       +'<span class="rule-res">'+g.result+'</span>'
       +(g.note?'<span class="rule-note">'+g.note+'</span>':'');
     b.appendChild(d);
-  });
+  }
+  regular.forEach(makeRow);
+  var sep=document.createElement('div');
+  sep.style.cssText='font-size:10px;font-weight:500;color:#854F0B;text-transform:uppercase;letter-spacing:.08em;padding:10px 0 4px;border-top:1.5px solid #FAEEDA;margin-top:4px;background:#FAEEDA22;border-radius:4px 4px 0 0;padding-left:4px';
+  sep.textContent='⚠ Exceptions & Irregulars';
+  b.appendChild(sep);
+  special.forEach(makeRow);
 }
 // INIT
 async function init(){
@@ -489,15 +503,16 @@ function setF(tp,m){var el=document.getElementById('fb');el.className='fb '+tp;e
 function loadR(){
   sL=null;sR=null;mat=0;hs={};wrongPairs=[];
   var vs=rds[ri],ugs=[...new Set(vs.map(v=>v.g))],rs=ALL_RULES.filter(r=>r.gs.some(g=>ugs.includes(g)));
-  document.getElementById('rl').textContent=t('round').replace('{n}',ri+1);
-  document.getElementById('bn').style.display='none';document.getElementById('bk-ok').innerHTML='';document.getElementById('bk-err').innerHTML='';
+  document.getElementById('rl').textContent=t('round').replaceAll('{n}',ri+1);
+  document.getElementById('bn').style.display='none';
+  if(ri>0){['bk-ok','bk-err'].forEach(function(id){var sep=document.createElement('div');sep.style.cssText='font-size:9px;color:#bbb;text-align:center;padding:4px 0 2px;border-top:0.5px solid #e5e3de;margin-top:3px';sep.textContent='── Round '+(ri+1)+' ──';document.getElementById(id).appendChild(sep);});}
   setF('idle',t('select'));updP();
   var cl=document.getElementById('cl'),cr=document.getElementById('cr');cl.innerHTML='';cr.innerHTML='';
   sf(vs).forEach(v=>{
     hs[v.h]=0;var el=document.createElement('div');el.className='item';el.dataset.g=v.g;el.dataset.h=v.h;el.dataset.te=v.te;
     var il=document.createElement('div');il.className='ileft';il.innerHTML='<span class="ih">'+v.h+'</span><span class="ik">'+v.k+'</span>';
     var hc=document.createElement('div');hc.className='hcol';var b1=document.createElement('div'),b2=document.createElement('div');
-    b1.className='hb';b1.textContent=t('hint1_lbl');b2.className='hb lk';b2.textContent=t('hint2_lbl');
+    b1.className='hb';b1.dataset.hint='1';b1.textContent=t('hint1_lbl');b2.className='hb lk';b2.dataset.hint='2';b2.textContent=t('hint2_lbl');
     b1.onclick=e=>{e.stopPropagation();if(b1.classList.contains('ud'))return;if(hs[v.h]<1){hs[v.h]=1;ht++;document.getElementById('sh').textContent=ht;updSI();}b1.classList.add('ud','y');b2.classList.remove('lk');setF('h1','\uD83D\uDCA1 '+v.gn+' / '+v.gj);};
     b2.onclick=e=>{e.stopPropagation();if(b2.classList.contains('lk')||b2.classList.contains('ud'))return;if(hs[v.h]<2){hs[v.h]=2;ht++;document.getElementById('sh').textContent=ht;updSI();}b2.classList.add('ud','v');setF('h2','\uD83D\uDCA1 e.g. '+v.ex);};
     hc.appendChild(b1);hc.appendChild(b2);el.appendChild(il);el.appendChild(hc);el.onclick=()=>selL(el);cl.appendChild(el);
