@@ -5,14 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🎌 JLPT N5 — て-form Matching Game</title>
 <style>
+html{zoom:1.5}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f7f4;color:#1a1a18;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:1.5rem 1rem}
 #app{width:100%;max-width:640px;position:relative}
 .titlerow{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem}
 .gametitle{font-size:14px;font-weight:500;color:#3C3489}
-.titlebtns{display:flex;gap:5px}
+.titlebtns{display:flex;gap:5px;align-items:center}
 .tbtn{font-size:11px;padding:3px 9px;border-radius:7px;border:0.5px solid #ccc;background:transparent;color:#555;cursor:pointer}
 .tbtn:hover{background:#f0eeea}
+select.tbtn{-webkit-appearance:none;appearance:none;padding:3px 7px}
 .top{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:.8rem}
 .sc{border-radius:8px;padding:8px 5px;text-align:center}
 .sc-g{background:#E1F5EE}.sc-r{background:#FCEBEB}.sc-y{background:#FAEEDA}.sc-b{background:#EAF3DE;cursor:pointer}.sc-b:hover{opacity:.85}.sc-p{background:#EEEDFE}
@@ -105,6 +107,11 @@ footer{text-align:center;font-size:11px;color:#bbb;margin-top:1.5rem;padding-top
 .boot-icon{font-size:28px;margin-bottom:12px}
 .boot-msg{font-size:15px;font-weight:500;color:#1a1a18;margin-bottom:6px}
 .boot-sub{font-size:12px;color:#aaa;min-height:18px;transition:opacity .3s}
+.rule-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid #eee}
+.rule-end{font-size:14px;font-weight:500;min-width:110px}
+.rule-arr{color:#aaa;font-size:12px}
+.rule-res{font-size:14px;font-weight:500;color:#1D9E75}
+.rule-note{font-size:10px;color:#aaa;margin-left:4px}
 </style>
 </head>
 <body>
@@ -124,17 +131,29 @@ footer{text-align:center;font-size:11px;color:#bbb;margin-top:1.5rem;padding-top
 
 <div id="app">
 <div class="titlerow">
-  <span class="gametitle">🎌 JLPT N5 — て-form Game</span>
+  <span class="gametitle" data-i18n="game_title">🎌 JLPT N5 — て-form Game</span>
   <div class="titlebtns">
-    <button class="tbtn" onclick="openM('te-rules')">📐 て Rules</button>
+    <select id="lang-sel" class="tbtn" onchange="setLang(this.value)" title="Language">
+      <option value="en">🇺🇸 EN</option>
+      <option value="es">🇪🇸 ES</option>
+      <option value="it">🇮🇹 IT</option>
+      <option value="pt">🇧🇷 PT</option>
+      <option value="fr">🇫🇷 FR</option>
+      <option value="zh">🇹🇼 中文</option>
+      <option value="ko">🇰🇷 한국어</option>
+      <option value="ja">🇯🇵 日本語</option>
+      <option value="th">🇹🇭 ไทย</option>
+      <option value="vi">🇻🇳 VN</option>
+    </select>
+    <button class="tbtn" onclick="openM('te-rules')" data-i18n="btn_rules">📐 て Rules</button>
     <button class="tbtn" id="mute-btn" onclick="toggleMute()">🔊</button>
   </div>
 </div>
 <div class="top">
-  <div class="sc sc-g"><span class="sv" id="sc">0</span><span class="sl">✅ correct</span></div>
-  <div class="sc sc-r"><span class="sv" id="se">0</span><span class="sl">❌ errors</span></div>
-  <div class="sc sc-y"><span class="sv" id="sh">0</span><span class="sl">💡 hints</span></div>
-  <div class="sc sc-b" onclick="openM('score-rules')"><span class="sv" id="si">—</span><span class="sl">📊 status</span></div>
+  <div class="sc sc-g"><span class="sv" id="sc">0</span><span class="sl" data-i18n="lbl_correct">✅ correct</span></div>
+  <div class="sc sc-r"><span class="sv" id="se">0</span><span class="sl" data-i18n="lbl_errors">❌ errors</span></div>
+  <div class="sc sc-y"><span class="sv" id="sh">0</span><span class="sl" data-i18n="lbl_hints">💡 hints</span></div>
+  <div class="sc sc-b" onclick="openM('score-rules')"><span class="sv" id="si">—</span><span class="sl" data-i18n="lbl_status">📊 status</span></div>
   <div class="sc sc-p">
     <span class="sv" id="tm">⏱ off</span>
     <select class="tsel" id="tsel" onchange="onTsel(this.value)">
@@ -150,31 +169,31 @@ footer{text-align:center;font-size:11px;color:#bbb;margin-top:1.5rem;padding-top
 <div id="game">
   <div class="rrow">
     <div class="rlbl" id="rl">🎌 Round 1 of 3</div>
-    <button class="htb" onclick="openM('htp')">❓ How to play</button>
+    <button class="htb" onclick="openM('htp')" data-i18n="btn_htp">❓ How to play</button>
   </div>
-  <div class="ch"><div class="chd">🔤 Verb (dict.)</div><div class="chd">📐 て-form rule</div></div>
+  <div class="ch"><div class="chd" data-i18n="col_verb">🔤 Verb (dict.)</div><div class="chd" data-i18n="col_rule">📐 て-form rule</div></div>
   <div class="cols"><div class="col" id="cl"></div><div class="col" id="cr"></div></div>
   <div class="fb loading" id="fb">⏳ Loading verbs from server...</div>
   <div class="bot-cols">
-    <div><div class="bot-col-hd">🏆 Matched</div><div class="bkw" id="bk-ok"></div></div>
-    <div><div class="bot-col-hd">❌ Non-matched</div><div class="bkw" id="bk-err"></div></div>
+    <div><div class="bot-col-hd" data-i18n="sec_matched">🏆 Matched</div><div class="bkw" id="bk-ok"></div></div>
+    <div><div class="bot-col-hd" data-i18n="sec_nonmatched">❌ Non-matched</div><div class="bkw" id="bk-err"></div></div>
   </div>
-  <button class="bni" id="bn" onclick="nxR()" style="display:none">Next round →</button>
+  <button class="bni" id="bn" onclick="nxR()" style="display:none" data-i18n="btn_next">Next round →</button>
 </div>
 
 <div id="done" style="display:none" class="dn">
   <div class="dsc" id="dsc"></div>
   <div class="dmg" id="dmg"></div>
   <div class="dbb" id="dbb"></div>
-  <button onclick="openM('lb')" class="action-btn">🏅 Leaderboard</button>
-  <button onclick="init()" class="action-btn primary">🔄 Play again</button>
+  <button onclick="openM('lb')" class="action-btn" data-i18n="btn_leaderboard">🏅 Leaderboard</button>
+  <button onclick="init()" class="action-btn primary" data-i18n="btn_play_again">🔄 Play again</button>
 </div>
 
 <div id="htp" class="ov"><div class="mc">
   <button class="mcx" onclick="closeM('htp')">✕</button>
-  <h3>❓ How to play / 遊(あそ)び方(かた)</h3>
-  <div class="yt"><iframe src="https://www.youtube.com/embed/Cj-P-nEPoe0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
-  <ul>
+  <h3 data-i18n="htp_title">❓ How to play / 遊(あそ)び方(かた)</h3>
+  <div class="yt"><iframe id="htp-iframe" src="https://www.youtube.com/embed/Cj-P-nEPoe0?enablejsapi=1" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+  <ul data-i18n="htp_ul">
     <li>Match each verb (left) to its て-form rule (right)</li>
     <li>Rules show <b>...→て</b> — revealed only when ALL verbs in that group match</li>
     <li><b>⚠</b> = Group 1 special. <b>✦</b> = Irregular verb</li>
@@ -182,19 +201,19 @@ footer{text-align:center;font-size:11px;color:#bbb;margin-top:1.5rem;padding-top
     <li>Click <b>❓</b> on matched pairs for grammar explanation</li>
     <li>Timer <b>pauses</b> when modals are open. Each round adds bonus time!</li>
   </ul>
-  <button onclick="closeM('htp')" class="action-btn">分(わ)かった！ Got it! 👍</button>
+  <button onclick="closeM('htp')" class="action-btn" data-i18n="htp_btn">分(わ)かった！ Got it! 👍</button>
 </div></div>
 
 <div id="why" class="ov"><div class="mc">
   <button class="mcx" onclick="closeM('why')">✕</button>
   <h3 id="why-t"></h3><div id="why-b"></div>
-  <button onclick="closeM('why')" class="action-btn" style="margin-top:8px">Close</button>
+  <button onclick="closeM('why')" class="action-btn" data-i18n="btn_close">Close</button>
 </div></div>
 
 <div id="rule-exp" class="ov"><div class="mc">
   <button class="mcx" onclick="closeM('rule-exp')">✕</button>
   <h3 id="re-t"></h3><div id="re-b"></div>
-  <button onclick="closeM('rule-exp')" class="action-btn" style="margin-top:8px">Close</button>
+  <button onclick="closeM('rule-exp')" class="action-btn" data-i18n="btn_close">Close</button>
 </div></div>
 
 <div id="score-rules" class="ov"><div class="mc">
@@ -207,33 +226,176 @@ footer{text-align:center;font-size:11px;color:#bbb;margin-top:1.5rem;padding-top
     <div class="sr"><div class="dot">🔴</div><div class="sr-text"><b>30% — Practice more!</b>Many errors and hints. がんばれ！</div></div>
   </div>
   <p style="font-size:11px;color:#aaa">Score = correct×100 − errors×15 − hints×10 + remaining_time×2</p>
-  <button onclick="closeM('score-rules')" class="action-btn" style="margin-top:8px">Close</button>
+  <button onclick="closeM('score-rules')" class="action-btn" style="margin-top:8px" data-i18n="btn_close">Close</button>
 </div></div>
 
 <div id="te-rules" class="ov"><div class="mc">
   <button class="mcx" onclick="closeM('te-rules')">✕</button>
-  <h3>📐 All て-form rules</h3>
+  <h3 data-i18n="rules_title">📐 All て-form rules</h3>
   <div id="te-rules-body"></div>
-  <button onclick="closeM('te-rules')" class="action-btn" style="margin-top:8px">Close</button>
+  <button onclick="closeM('te-rules')" class="action-btn" style="margin-top:8px" data-i18n="btn_close">Close</button>
 </div></div>
 
 <div id="lb" class="ov"><div class="mc">
   <button class="mcx" onclick="closeM('lb')">✕</button>
-  <h3>🏅 Leaderboard / リーダーボード</h3>
+  <h3 data-i18n="lb_title">🏅 Leaderboard / リーダーボード</h3>
   <p style="font-size:10px;color:#aaa;margin-bottom:8px">Scores are saved on the server — they persist between sessions! 🎉</p>
   <div id="lb-nr" style="margin-bottom:8px">
-    <p style="margin-bottom:5px;font-size:11px;color:#aaa">Your name (8 chars max)</p>
-    <input class="ninp" id="ninp" maxlength="8" placeholder="Your name..." />
-    <button onclick="saveLB()" class="action-btn primary">💾 Save my score</button>
+    <p style="margin-bottom:5px;font-size:11px;color:#aaa" data-i18n="lb_name_label">Your name (8 chars max)</p>
+    <input class="ninp" id="ninp" maxlength="8" placeholder="Your name..." data-i18n-ph="lb_name_ph" />
+    <button onclick="saveLB()" class="action-btn primary" data-i18n="lb_save">💾 Save my score</button>
   </div>
   <table class="lbt"><thead><tr><th>#</th><th>Name</th><th>Score</th><th>Status</th><th>Time</th></tr></thead><tbody id="lbb"></tbody></table>
-  <button onclick="closeM('lb')" class="action-btn">Close</button>
+  <button onclick="closeM('lb')" class="action-btn" data-i18n="btn_close">Close</button>
 </div></div>
 
-<footer>🎌 JLPT N5 て-form Game</footer>
+<footer data-i18n="footer">🎌 JLPT N5 て-form Game · © 2026 Ericsson Graciolli · All rights reserved</footer>
 </div>
 
 <script>
+// TRANSLATIONS
+const LANG={
+  en:{flag:'🇺🇸',name:'EN',
+    game_title:'🎌 JLPT N5 — て-form Game',btn_rules:'📐 て Rules',btn_htp:'❓ How to play',
+    lbl_correct:'✅ correct',lbl_errors:'❌ errors',lbl_hints:'💡 hints',lbl_status:'📊 status',
+    col_verb:'🔤 Verb (dict.)',col_rule:'📐 て-form rule',sec_matched:'🏆 Matched',sec_nonmatched:'❌ Non-matched',
+    btn_next:'Next round →',btn_play_again:'🔄 Play again',btn_leaderboard:'🏅 Leaderboard',btn_close:'Close',
+    htp_title:'❓ How to play / 遊(あそ)び方(かた)',htp_btn:'分(わ)かった！ Got it! 👍',
+    htp_ul:'<li>Match each verb (left) to its て-form rule (right)</li><li>Rules show <b>...→て</b> — revealed only when ALL verbs in that group match</li><li><b>⚠</b> = Group 1 special. <b>✦</b> = Irregular verb</li><li><b>💡 Hint 1</b> = verb group. <b>💡 Hint 2</b> = example (after Hint 1)</li><li>Click <b>❓</b> on matched pairs for grammar explanation</li><li>Timer <b>pauses</b> when modals are open. Each round adds bonus time!</li>',
+    rules_title:'📐 All て-form rules',lb_title:'🏅 Leaderboard / リーダーボード',
+    lb_name_label:'Your name (8 chars max)',lb_name_ph:'Your name...',lb_save:'💾 Save my score',
+    footer:'🎌 JLPT N5 て-form Game · © 2026 Ericsson Graciolli · All rights reserved',
+    round:'🎌 Round {n} of 3 / 第(だい){n}ラウンド',select:'Select a verb 👈 then its rule 👉',
+    loading:'⏳ Loading verbs...',failed:'❌ Failed to load verbs. Please reload.',
+    hint1_lbl:'💡 Hint 1',hint2_lbl:'💡 Hint 2'},
+  es:{flag:'🇪🇸',name:'ES',
+    game_title:'🎌 JLPT N5 — Juego de forma て',btn_rules:'📐 Reglas て',btn_htp:'❓ Cómo jugar',
+    lbl_correct:'✅ correcto',lbl_errors:'❌ errores',lbl_hints:'💡 pistas',lbl_status:'📊 estado',
+    col_verb:'🔤 Verbo (dict.)',col_rule:'📐 Regla て-form',sec_matched:'🏆 Emparejado',sec_nonmatched:'❌ No emparejado',
+    btn_next:'Siguiente ronda →',btn_play_again:'🔄 Jugar de nuevo',btn_leaderboard:'🏅 Clasificación',btn_close:'Cerrar',
+    htp_title:'❓ Cómo jugar / 遊(あそ)び方(かた)',htp_btn:'分(わ)かった！ ¡Entendido! 👍',
+    htp_ul:'<li>Empareja cada verbo (izq.) con su regla て-form (der.)</li><li>Las reglas muestran <b>...→て</b> — reveladas solo cuando TODOS los verbos del grupo coinciden</li><li><b>⚠</b> = Grupo 1 especial. <b>✦</b> = Verbo irregular</li><li><b>💡 Pista 1</b> = grupo verbal. <b>💡 Pista 2</b> = ejemplo</li><li>Haz clic en <b>❓</b> para explicación gramatical</li><li>El temporizador se <b>pausa</b> con los modales abiertos. ¡Cada ronda añade tiempo bonus!</li>',
+    rules_title:'📐 Todas las reglas て-form',lb_title:'🏅 Clasificación / リーダーボード',
+    lb_name_label:'Tu nombre (máx. 8 caracteres)',lb_name_ph:'Tu nombre...',lb_save:'💾 Guardar puntuación',
+    footer:'🎌 JLPT N5 て-form Game · © 2026 Ericsson Graciolli · Todos los derechos reservados',
+    round:'🎌 Ronda {n} de 3 / 第(だい){n}ラウンド',select:'Selecciona un verbo 👈 y su regla 👉',
+    loading:'⏳ Cargando verbos...',failed:'❌ Error al cargar. Recarga la página.',
+    hint1_lbl:'💡 Pista 1',hint2_lbl:'💡 Pista 2'},
+  it:{flag:'🇮🇹',name:'IT',
+    game_title:'🎌 JLPT N5 — Gioco della forma て',btn_rules:'📐 Regole て',btn_htp:'❓ Come giocare',
+    lbl_correct:'✅ corretti',lbl_errors:'❌ errori',lbl_hints:'💡 aiuti',lbl_status:'📊 stato',
+    col_verb:'🔤 Verbo (dict.)',col_rule:'📐 Regola て-form',sec_matched:'🏆 Abbinati',sec_nonmatched:'❌ Non abbinati',
+    btn_next:'Round successivo →',btn_play_again:'🔄 Gioca ancora',btn_leaderboard:'🏅 Classifica',btn_close:'Chiudi',
+    htp_title:'❓ Come giocare / 遊(あそ)び方(かた)',htp_btn:'分(わ)かった！ Capito! 👍',
+    htp_ul:'<li>Abbina ogni verbo (sinistra) alla sua regola て-form (destra)</li><li>Le regole mostrano <b>...→て</b> — rivelate quando TUTTI i verbi del gruppo corrispondono</li><li><b>⚠</b> = Gruppo 1 speciale. <b>✦</b> = Verbo irregolare</li><li><b>💡 Sugg. 1</b> = gruppo verbale. <b>💡 Sugg. 2</b> = esempio</li><li>Clicca <b>❓</b> per spiegazione grammaticale</li><li>Il timer si <b>mette in pausa</b> con i modali aperti. Ogni round aggiunge tempo bonus!</li>',
+    rules_title:'📐 Tutte le regole て-form',lb_title:'🏅 Classifica / リーダーボード',
+    lb_name_label:'Il tuo nome (max 8 caratteri)',lb_name_ph:'Il tuo nome...',lb_save:'💾 Salva il punteggio',
+    footer:'🎌 JLPT N5 て-form Game · © 2026 Ericsson Graciolli · Tutti i diritti riservati',
+    round:'🎌 Round {n} di 3 / 第(だい){n}ラウンド',select:'Seleziona un verbo 👈 poi la sua regola 👉',
+    loading:'⏳ Caricamento verbi...',failed:'❌ Caricamento fallito. Ricarica la pagina.',
+    hint1_lbl:'💡 Sugg. 1',hint2_lbl:'💡 Sugg. 2'},
+  pt:{flag:'🇧🇷',name:'PT',
+    game_title:'🎌 JLPT N5 — Jogo da forma て',btn_rules:'📐 Regras て',btn_htp:'❓ Como jogar',
+    lbl_correct:'✅ correto',lbl_errors:'❌ erros',lbl_hints:'💡 dicas',lbl_status:'📊 status',
+    col_verb:'🔤 Verbo (dict.)',col_rule:'📐 Regra て-form',sec_matched:'🏆 Combinados',sec_nonmatched:'❌ Não combinados',
+    btn_next:'Próxima rodada →',btn_play_again:'🔄 Jogar de novo',btn_leaderboard:'🏅 Placar',btn_close:'Fechar',
+    htp_title:'❓ Como jogar / 遊(あそ)び方(かた)',htp_btn:'分(わ)かった！ Entendido! 👍',
+    htp_ul:'<li>Combine cada verbo (esq.) com sua regra て-form (dir.)</li><li>As regras mostram <b>...→て</b> — reveladas só quando TODOS os verbos do grupo combinarem</li><li><b>⚠</b> = Grupo 1 especial. <b>✦</b> = Verbo irregular</li><li><b>💡 Dica 1</b> = grupo verbal. <b>💡 Dica 2</b> = exemplo</li><li>Clique em <b>❓</b> para explicação gramatical</li><li>O timer <b>pausa</b> com modais abertos. Cada rodada adiciona tempo bônus!</li>',
+    rules_title:'📐 Todas as regras て-form',lb_title:'🏅 Placar / リーダーボード',
+    lb_name_label:'Seu nome (máx. 8 caracteres)',lb_name_ph:'Seu nome...',lb_save:'💾 Salvar pontuação',
+    footer:'🎌 JLPT N5 て-form Game · © 2026 Ericsson Graciolli · Todos os direitos reservados',
+    round:'🎌 Rodada {n} de 3 / 第(だい){n}ラウンド',select:'Selecione um verbo 👈 e sua regra 👉',
+    loading:'⏳ Carregando verbos...',failed:'❌ Falha ao carregar. Recarregue a página.',
+    hint1_lbl:'💡 Dica 1',hint2_lbl:'💡 Dica 2'},
+  fr:{flag:'🇫🇷',name:'FR',
+    game_title:'🎌 JLPT N5 — Jeu de la forme て',btn_rules:'📐 Règles て',btn_htp:'❓ Comment jouer',
+    lbl_correct:'✅ correct',lbl_errors:'❌ erreurs',lbl_hints:'💡 indices',lbl_status:'📊 statut',
+    col_verb:'🔤 Verbe (dict.)',col_rule:'📐 Règle て-form',sec_matched:'🏆 Associés',sec_nonmatched:'❌ Non associés',
+    btn_next:'Ronde suivante →',btn_play_again:'🔄 Rejouer',btn_leaderboard:'🏅 Classement',btn_close:'Fermer',
+    htp_title:'❓ Comment jouer / 遊(あそ)び方(かた)',htp_btn:'分(わ)かった！ Compris ! 👍',
+    htp_ul:'<li>Associez chaque verbe (gauche) à sa règle て-form (droite)</li><li>Les règles affichent <b>...→て</b> — révélées quand TOUS les verbes du groupe sont associés</li><li><b>⚠</b> = Groupe 1 spécial. <b>✦</b> = Verbe irrégulier</li><li><b>💡 Indice 1</b> = groupe verbal. <b>💡 Indice 2</b> = exemple</li><li>Cliquez sur <b>❓</b> pour une explication grammaticale</li><li>Le minuteur se <b>met en pause</b> avec les modales ouvertes. Chaque ronde ajoute du temps bonus !</li>',
+    rules_title:'📐 Toutes les règles て-form',lb_title:'🏅 Classement / リーダーボード',
+    lb_name_label:'Votre nom (8 caractères max)',lb_name_ph:'Votre nom...',lb_save:'💾 Sauvegarder le score',
+    footer:'🎌 JLPT N5 て-form Game · © 2026 Ericsson Graciolli · Tous droits réservés',
+    round:'🎌 Ronde {n} sur 3 / 第(だい){n}ラウンド',select:'Sélectionnez un verbe 👈 puis sa règle 👉',
+    loading:'⏳ Chargement des verbes...',failed:'❌ Échec du chargement. Rechargez la page.',
+    hint1_lbl:'💡 Indice 1',hint2_lbl:'💡 Indice 2'},
+  zh:{flag:'🇹🇼',name:'中文',
+    game_title:'🎌 JLPT N5 — て形配對遊戲',btn_rules:'📐 て形規則',btn_htp:'❓ 遊戲說明',
+    lbl_correct:'✅ 正確',lbl_errors:'❌ 錯誤',lbl_hints:'💡 提示',lbl_status:'📊 狀態',
+    col_verb:'🔤 動詞（辭書形）',col_rule:'📐 て形規則',sec_matched:'🏆 已配對',sec_nonmatched:'❌ 未配對',
+    btn_next:'下一回合 →',btn_play_again:'🔄 再玩一次',btn_leaderboard:'🏅 排行榜',btn_close:'關閉',
+    htp_title:'❓ 遊戲說明 / 遊(あそ)び方(かた)',htp_btn:'分(わ)かった！ 明白了！👍',
+    htp_ul:'<li>將每個動詞（左）與其て形規則（右）配對</li><li>規則顯示<b>...→て</b>——所有動詞配對後才顯示</li><li><b>⚠</b> = 第1組特殊。<b>✦</b> = 不規則動詞</li><li><b>💡 提示1</b> = 動詞組。<b>💡 提示2</b> = 例子</li><li>點擊已配對的<b>❓</b>查看語法說明</li><li>模態框開啟時計時器<b>暫停</b>。每回合增加獎勵時間！</li>',
+    rules_title:'📐 所有て形規則',lb_title:'🏅 排行榜 / リーダーボード',
+    lb_name_label:'您的名字（最多8個字元）',lb_name_ph:'您的名字...',lb_save:'💾 儲存分數',
+    footer:'🎌 JLPT N5 て-form Game · © 2026 Ericsson Graciolli · 版權所有',
+    round:'🎌 第{n}回合 共3回合 / 第(だい){n}ラウンド',select:'選擇動詞 👈 再選規則 👉',
+    loading:'⏳ 載入動詞中...',failed:'❌ 載入失敗，請重新整理。',
+    hint1_lbl:'💡 提示1',hint2_lbl:'💡 提示2'},
+  ko:{flag:'🇰🇷',name:'한국어',
+    game_title:'🎌 JLPT N5 — て형 매칭 게임',btn_rules:'📐 て 규칙',btn_htp:'❓ 게임 방법',
+    lbl_correct:'✅ 정답',lbl_errors:'❌ 오답',lbl_hints:'💡 힌트',lbl_status:'📊 상태',
+    col_verb:'🔤 동사 (사전형)',col_rule:'📐 て형 규칙',sec_matched:'🏆 매칭됨',sec_nonmatched:'❌ 미매칭',
+    btn_next:'다음 라운드 →',btn_play_again:'🔄 다시 플레이',btn_leaderboard:'🏅 리더보드',btn_close:'닫기',
+    htp_title:'❓ 게임 방법 / 遊(あそ)び方(かた)',htp_btn:'分(わ)かった！ 알겠어요! 👍',
+    htp_ul:'<li>각 동사(왼쪽)를 て형 규칙(오른쪽)에 매칭하세요</li><li>규칙은 <b>...→て</b>를 표시 — 그룹의 모든 동사가 매칭될 때 공개됩니다</li><li><b>⚠</b> = 1그룹 특수. <b>✦</b> = 불규칙 동사</li><li><b>💡 힌트 1</b> = 동사 그룹. <b>💡 힌트 2</b> = 예시</li><li>매칭된 쌍의 <b>❓</b>를 클릭하면 문법 설명이 나옵니다</li><li>모달이 열리면 타이머가 <b>일시정지</b>됩니다. 매 라운드마다 보너스 시간 추가!</li>',
+    rules_title:'📐 て형 모든 규칙',lb_title:'🏅 리더보드 / リーダーボード',
+    lb_name_label:'이름 (최대 8자)',lb_name_ph:'이름...',lb_save:'💾 점수 저장',
+    footer:'🎌 JLPT N5 て-form Game · © 2026 Ericsson Graciolli · All rights reserved',
+    round:'🎌 {n}라운드 / 3 / 第(だい){n}ラウンド',select:'동사 선택 👈 후 규칙 선택 👉',
+    loading:'⏳ 동사 불러오는 중...',failed:'❌ 로딩 실패. 페이지를 새로고침하세요.',
+    hint1_lbl:'💡 힌트 1',hint2_lbl:'💡 힌트 2'},
+  ja:{flag:'🇯🇵',name:'日本語',
+    game_title:'🎌 JLPT N5 — て形マッチングゲーム',btn_rules:'📐 て形ルール',btn_htp:'❓ 遊び方',
+    lbl_correct:'✅ 正解',lbl_errors:'❌ 間違い',lbl_hints:'💡 ヒント',lbl_status:'📊 状態',
+    col_verb:'🔤 動詞（辞書形）',col_rule:'📐 て形ルール',sec_matched:'🏆 マッチ済み',sec_nonmatched:'❌ 未マッチ',
+    btn_next:'次のラウンド →',btn_play_again:'🔄 もう一度',btn_leaderboard:'🏅 ランキング',btn_close:'閉じる',
+    htp_title:'❓ 遊び方',htp_btn:'分(わ)かった！👍',
+    htp_ul:'<li>動詞（左）をて形ルール（右）と対応させてください</li><li>ルールは<b>...→て</b>を表示 — グループの全動詞がマッチしたときのみ公開</li><li><b>⚠</b> = 1グループ特殊。<b>✦</b> = 不規則動詞</li><li><b>💡 ヒント1</b> = 動詞グループ。<b>💡 ヒント2</b> = 例文</li><li>マッチしたペアの<b>❓</b>をクリックして文法説明を確認</li><li>モーダルが開いているとタイマーが<b>一時停止</b>します。各ラウンドでボーナス時間が追加！</li>',
+    rules_title:'📐 て形ルール一覧',lb_title:'🏅 ランキング',
+    lb_name_label:'名前（8文字まで）',lb_name_ph:'名前...',lb_save:'💾 スコアを保存',
+    footer:'🎌 JLPT N5 て形ゲーム · © 2026 Ericsson Graciolli · All rights reserved',
+    round:'🎌 第(だい){n}ラウンド（全3回）',select:'動詞を選んで 👈 ルールを選ぼう 👉',
+    loading:'⏳ 動詞を読み込み中...',failed:'❌ 読み込み失敗。ページを再読み込みしてください。',
+    hint1_lbl:'💡 ヒント1',hint2_lbl:'💡 ヒント2'},
+  th:{flag:'🇹🇭',name:'ไทย',
+    game_title:'🎌 JLPT N5 — เกมรูปแบบ て',btn_rules:'📐 กฎ て',btn_htp:'❓ วิธีเล่น',
+    lbl_correct:'✅ ถูก',lbl_errors:'❌ ผิด',lbl_hints:'💡 คำใบ้',lbl_status:'📊 สถานะ',
+    col_verb:'🔤 กริยา (พจนานุกรม)',col_rule:'📐 กฎ て-form',sec_matched:'🏆 จับคู่แล้ว',sec_nonmatched:'❌ ยังไม่จับคู่',
+    btn_next:'รอบถัดไป →',btn_play_again:'🔄 เล่นอีกครั้ง',btn_leaderboard:'🏅 ลีดเดอร์บอร์ด',btn_close:'ปิด',
+    htp_title:'❓ วิธีเล่น / 遊(あそ)び方(かた)',htp_btn:'分(わ)かった！ เข้าใจแล้ว! 👍',
+    htp_ul:'<li>จับคู่กริยาแต่ละตัว (ซ้าย) กับกฎ て-form (ขวา)</li><li>กฎแสดง <b>...→て</b> — เผยเมื่อกริยาทั้งหมดในกลุ่มถูกจับคู่</li><li><b>⚠</b> = กลุ่ม 1 พิเศษ. <b>✦</b> = กริยาผิดปกติ</li><li><b>💡 คำใบ้ 1</b> = กลุ่มกริยา. <b>💡 คำใบ้ 2</b> = ตัวอย่าง</li><li>คลิก <b>❓</b> บนคู่ที่จับแล้วเพื่ออธิบายไวยากรณ์</li><li>ตัวจับเวลา<b>หยุดชั่วคราว</b>เมื่อโมดัลเปิดอยู่ แต่ละรอบเพิ่มเวลาโบนัส!</li>',
+    rules_title:'📐 กฎ て-form ทั้งหมด',lb_title:'🏅 ลีดเดอร์บอร์ด / リーダーボード',
+    lb_name_label:'ชื่อของคุณ (สูงสุด 8 ตัวอักษร)',lb_name_ph:'ชื่อของคุณ...',lb_save:'💾 บันทึกคะแนน',
+    footer:'🎌 JLPT N5 て-form Game · © 2026 Ericsson Graciolli · All rights reserved',
+    round:'🎌 รอบที่ {n} จาก 3 / 第(だい){n}ラウンド',select:'เลือกกริยา 👈 แล้วเลือกกฎ 👉',
+    loading:'⏳ กำลังโหลดกริยา...',failed:'❌ โหลดล้มเหลว กรุณารีโหลดหน้า',
+    hint1_lbl:'💡 คำใบ้ 1',hint2_lbl:'💡 คำใบ้ 2'},
+  vi:{flag:'🇻🇳',name:'VN',
+    game_title:'🎌 JLPT N5 — Trò chơi て-form',btn_rules:'📐 Quy tắc て',btn_htp:'❓ Cách chơi',
+    lbl_correct:'✅ đúng',lbl_errors:'❌ sai',lbl_hints:'💡 gợi ý',lbl_status:'📊 trạng thái',
+    col_verb:'🔤 Động từ (từ điển)',col_rule:'📐 Quy tắc て-form',sec_matched:'🏆 Đã ghép',sec_nonmatched:'❌ Chưa ghép',
+    btn_next:'Vòng tiếp theo →',btn_play_again:'🔄 Chơi lại',btn_leaderboard:'🏅 Bảng xếp hạng',btn_close:'Đóng',
+    htp_title:'❓ Cách chơi / 遊(あそ)び方(かた)',htp_btn:'分(わ)かった！ Hiểu rồi! 👍',
+    htp_ul:'<li>Ghép mỗi động từ (trái) với quy tắc て-form (phải)</li><li>Quy tắc hiển thị <b>...→て</b> — chỉ hiện khi TẤT CẢ động từ trong nhóm được ghép</li><li><b>⚠</b> = Nhóm 1 đặc biệt. <b>✦</b> = Động từ bất quy tắc</li><li><b>💡 Gợi ý 1</b> = nhóm động từ. <b>💡 Gợi ý 2</b> = ví dụ</li><li>Nhấp <b>❓</b> trên các cặp đã ghép để xem giải thích ngữ pháp</li><li>Đồng hồ <b>tạm dừng</b> khi cửa sổ đang mở. Mỗi vòng thêm thời gian thưởng!</li>',
+    rules_title:'📐 Tất cả quy tắc て-form',lb_title:'🏅 Bảng xếp hạng / リーダーボード',
+    lb_name_label:'Tên của bạn (tối đa 8 ký tự)',lb_name_ph:'Tên của bạn...',lb_save:'💾 Lưu điểm',
+    footer:'🎌 JLPT N5 て-form Game · © 2026 Ericsson Graciolli · All rights reserved',
+    round:'🎌 Vòng {n}/3 / 第(だい){n}ラウンド',select:'Chọn động từ 👈 rồi quy tắc 👉',
+    loading:'⏳ Đang tải động từ...',failed:'❌ Tải thất bại. Hãy tải lại trang.',
+    hint1_lbl:'💡 Gợi ý 1',hint2_lbl:'💡 Gợi ý 2'}
+};
+var curLang='en';
+function t(k){return(LANG[curLang]&&LANG[curLang][k])||LANG.en[k]||k;}
+function applyLang(){
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var k=el.dataset.i18n;
+    if(el.tagName==='UL'){el.innerHTML=t(k);}else{el.textContent=t(k);}
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(function(el){el.placeholder=t(el.dataset.i18nPh);});
+}
+function setLang(l){curLang=l;localStorage.setItem('te_lang',l);applyLang();}
 // CONFIG
 const API_BASE=window.API_BASE||'https://te-form-backend.onrender.com';
 // SESSION
@@ -272,13 +434,39 @@ function pauseTm(){clearInterval(tInt);tInt=null;stopBg();}
 function resumeTm(){if(tSel<=0||tLeft<=0)return;if(!muted)updBg();tInt=setInterval(()=>{if(modalOpen>0)return;tLeft--;var e=document.getElementById('tm');if(tLeft<=10){e.className='sv tm-warn';playTick();}else e.className='sv';e.textContent='\u23F1 '+fmt(Math.max(0,tLeft));updBg();if(tLeft<=0){clearInterval(tInt);tInt=null;stopBg();setF('err','\u23F0 Time up!');setTimeout(shDn,1200);}},1000);}
 // MODALS
 function openM(id){modalOpen++;document.getElementById(id).classList.add('open');}
-function closeM(id){document.getElementById(id).classList.remove('open');modalOpen=Math.max(0,modalOpen-1);}
+function closeM(id){
+  document.getElementById(id).classList.remove('open');
+  modalOpen=Math.max(0,modalOpen-1);
+  if(id==='htp'){var ifr=document.getElementById('htp-iframe');if(ifr)ifr.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}','*');}
+}
 // SCORE
 function updSI(){var el=document.getElementById('si'),v='\u2014';if(cor>0||err>0||ht>0){if(err===0&&ht===0)v='\uD83D\uDFE2 100%';else if(err<=2&&ht<=3)v='\uD83D\uDFE1 70%';else if(err<=5||ht<=6)v='\uD83D\uDFE0 50%';else v='\uD83D\uDD34 30%';}el.textContent=v;}
 function calcScore(){var s=cor*100-err*15-ht*10;if(tSel>0&&tLeft>0)s+=tLeft*2;return Math.max(0,s);}
 function getInd(){if(err===0&&ht===0&&cor===15)return{e:'\uD83D\uDFE2',t:'\uD83D\uDFE2 = 100%: Perfect!'};if(err<=2&&ht<=3)return{e:'\uD83D\uDFE1',t:'\uD83D\uDFE1 = 70%: Good!'};if(err<=5||ht<=6)return{e:'\uD83D\uDFE0',t:'\uD83D\uDFE0 = 50%: Keep going!'};return{e:'\uD83D\uDD34',t:'\uD83D\uDD34 = 30%: Practice more!'};}
 function fmtEl(){if(tSel<=0)return'\u2014';return fmt(Math.max(0,tSel-tLeft));}
-function buildTeRules(){var b=document.getElementById('te-rules-body');b.innerHTML='';ALL_RULES.forEach(r=>{var d=document.createElement('div');d.style.cssText='display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:0.5px solid #eee';var rl=r.r.replace('\u26a0','<span class="sym" title="\u26a0 Group 1 Special!">\u26a0</span>').replace('\u2726','<span class="sym" title="\u2726 Irregular verb!">\u2726</span>');d.innerHTML='<span style="font-size:14px;font-weight:500;color:#1a1a18;flex:1">'+rl+'</span>';b.appendChild(d);});}
+function buildTeRules(){
+  var b=document.getElementById('te-rules-body');b.innerHTML='';
+  var groups=[
+    {ends:'る',result:'て',color:'#1D9E75',note:'Group 2 — syllable before る is from い/え row (e.g. たべる、みる、おきる)'},
+    {ends:'う・つ・る ⚠',result:'って',color:'#854F0B',note:'Group 1 — ⚠ る looks like G2 but is G1 (e.g. かう、まつ、かえる)'},
+    {ends:'む・ぶ・ぬ',result:'んで',color:'#1a1a18',note:'Group 1 nasal ending (e.g. のむ、あそぶ、しぬ)'},
+    {ends:'く',result:'いて',color:'#1a1a18',note:'Group 1 (e.g. かく、きく) — exception: いく → いって'},
+    {ends:'いく',result:'いって',color:'#854F0B',note:'⚠ Exception to く rule (to go)'},
+    {ends:'ぐ',result:'いで',color:'#1a1a18',note:'Group 1 voiced — partner of く (e.g. およぐ、いそぐ)'},
+    {ends:'す',result:'して',color:'#1a1a18',note:'Group 1 (e.g. はなす、かす、けす)'},
+    {ends:'する ✦',result:'して',color:'#534AB7',note:'Irregular verb (to do) — also compound verbs: べんきょうする…'},
+    {ends:'くる ✦',result:'きて',color:'#534AB7',note:'Irregular verb (to come) — reading changes: く→き'},
+  ];
+  groups.forEach(function(g){
+    var d=document.createElement('div');
+    d.className='rule-row';
+    d.innerHTML='<span class="rule-end" style="color:'+g.color+'">'+g.ends+'</span>'
+      +'<span class="rule-arr">→</span>'
+      +'<span class="rule-res">'+g.result+'</span>'
+      +(g.note?'<span class="rule-note">'+g.note+'</span>':'');
+    b.appendChild(d);
+  });
+}
 // INIT
 async function init(){
   clearInterval(tInt);tInt=null;stopBg();
@@ -289,27 +477,27 @@ async function init(){
   document.getElementById('si').textContent='\u2014';
   document.getElementById('bk-ok').innerHTML='';
   document.getElementById('bk-err').innerHTML='';
-  unlockTimer();setF('loading','\u29B3 Loading verbs...');
+  unlockTimer();setF('loading',t('loading'));
   document.getElementById('cl').innerHTML='';document.getElementById('cr').innerHTML='';
   buildTeRules();
   try{var data=await apiFetch('/api/verbs');allVerbs=data.verbs;rds=[allVerbs.slice(0,5),allVerbs.slice(5,10),allVerbs.slice(10,15)];ri=0;if(tSel>0){lockTimer();startTm();}else document.getElementById('tm').textContent='\u23F1 off';loadR();}
-  catch(e){setF('err','\u274C Failed to load verbs. Please reload.');console.error(e);}
+  catch(e){setF('err',t('failed'));console.error(e);}
 }
 function sf(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
 function updP(){document.getElementById('pg').style.width=Math.round((ri*5+mat)/15*100)+'%';}
-function setF(t,m){var el=document.getElementById('fb');el.className='fb '+t;el.textContent=m;}
+function setF(tp,m){var el=document.getElementById('fb');el.className='fb '+tp;el.textContent=m;}
 function loadR(){
   sL=null;sR=null;mat=0;hs={};wrongPairs=[];
   var vs=rds[ri],ugs=[...new Set(vs.map(v=>v.g))],rs=ALL_RULES.filter(r=>r.gs.some(g=>ugs.includes(g)));
-  document.getElementById('rl').textContent='\uD83C\uDF8C Round '+(ri+1)+' of 3 / \u7B2C(\u3060\u3044)'+(ri+1)+'\u30E9\u30A6\u30F3\u30C9';
+  document.getElementById('rl').textContent=t('round').replace('{n}',ri+1);
   document.getElementById('bn').style.display='none';document.getElementById('bk-ok').innerHTML='';document.getElementById('bk-err').innerHTML='';
-  setF('idle','Select a verb \uD83D\uDC48 then its rule \uD83D\uDC49');updP();
+  setF('idle',t('select'));updP();
   var cl=document.getElementById('cl'),cr=document.getElementById('cr');cl.innerHTML='';cr.innerHTML='';
   sf(vs).forEach(v=>{
     hs[v.h]=0;var el=document.createElement('div');el.className='item';el.dataset.g=v.g;el.dataset.h=v.h;el.dataset.te=v.te;
     var il=document.createElement('div');il.className='ileft';il.innerHTML='<span class="ih">'+v.h+'</span><span class="ik">'+v.k+'</span>';
     var hc=document.createElement('div');hc.className='hcol';var b1=document.createElement('div'),b2=document.createElement('div');
-    b1.className='hb';b1.textContent='\uD83D\uDCA1 Hint 1';b2.className='hb lk';b2.textContent='\uD83D\uDCA1 Hint 2';
+    b1.className='hb';b1.textContent=t('hint1_lbl');b2.className='hb lk';b2.textContent=t('hint2_lbl');
     b1.onclick=e=>{e.stopPropagation();if(b1.classList.contains('ud'))return;if(hs[v.h]<1){hs[v.h]=1;ht++;document.getElementById('sh').textContent=ht;updSI();}b1.classList.add('ud','y');b2.classList.remove('lk');setF('h1','\uD83D\uDCA1 '+v.gn+' / '+v.gj);};
     b2.onclick=e=>{e.stopPropagation();if(b2.classList.contains('lk')||b2.classList.contains('ud'))return;if(hs[v.h]<2){hs[v.h]=2;ht++;document.getElementById('sh').textContent=ht;updSI();}b2.classList.add('ud','v');setF('h2','\uD83D\uDCA1 e.g. '+v.ex);};
     hc.appendChild(b1);hc.appendChild(b2);el.appendChild(il);el.appendChild(hc);el.onclick=()=>selL(el);cl.appendChild(el);
@@ -337,16 +525,25 @@ function tryM(){
     setF('err','\u274C Wrong! / \u9055(\u3061\u304C)\u3046\uFF01');setTimeout(()=>{L.classList.remove('err','sel');R2.classList.remove('err','sel');},800);
   }
 }
-function addWrongPair(vh,ruleStr){var bi=document.createElement('div');bi.className='bi wbi';bi.innerHTML=vh+'<span class="ar">\u2717</span>'+ruleStr.replace(' \u26a0','').replace(' \u2726','');var wb=document.createElement('button');wb.className='wb';wb.textContent='\uD83D\uDCB0?';wb.onclick=()=>{var cleanR=ruleStr.replace(' \u26a0','').replace(' \u2726','');document.getElementById('re-t').textContent='\uD83D\uDCB0 Rule: '+ruleStr;document.getElementById('re-b').innerHTML=RULE_EXP[ruleStr]||RULE_EXP[cleanR]||'<p>See \uD83D\uDCB0 \u3066 Rules for details.</p>';openM('rule-exp');};bi.appendChild(wb);document.getElementById('bk-err').appendChild(bi);}
+function addWrongPair(vh,ruleStr){var bi=document.createElement('div');bi.className='bi wbi';bi.innerHTML=vh+'<span class="ar">\u2717</span>'+ruleStr.replace(' \u26a0','').replace(' \u2726','');var wb=document.createElement('button');wb.className='wb';wb.textContent='📖';wb.onclick=()=>{var cleanR=ruleStr.replace(' \u26a0','').replace(' \u2726','');document.getElementById('re-t').textContent='📖 Rule: '+ruleStr;document.getElementById('re-b').innerHTML=RULE_EXP[ruleStr]||RULE_EXP[cleanR]||'<p>See \uD83D\uDCB0 \u3066 Rules for details.</p>';openM('rule-exp');};bi.appendChild(wb);document.getElementById('bk-err').appendChild(bi);}
 function nxR(){ri++;if(tSel>0){var bonus=tSel;tLeft+=bonus;document.getElementById('tm').className='sv';document.getElementById('tm').textContent='\u23F1 '+fmt(tLeft);showBonus('+'+fmt(bonus)+'!');playBonus();setTimeout(resumeTm,400);}document.getElementById('bn').style.display='none';loadR();}
 function showBonus(txt){var el=document.getElementById('bonus-anim');el.style.transition='none';el.style.opacity='1';el.style.top='32%';el.textContent='\u23F1 '+txt;setTimeout(()=>{el.style.transition='opacity 2s ease, top 2s ease';el.style.top='8%';el.style.opacity='0';},80);}
 function showPuzzle(root,conj){var ov=document.getElementById('puzzle-overlay'),svg=document.getElementById('puzzle-svg');var rs=root.slice(0,-1)||root;svg.innerHTML='<g id="p-left" style="transform:translateX(-50px);transition:none"><rect x="5" y="10" width="70" height="60" rx="10" fill="#7F77DD" opacity=".92"/><path d="M75 30 Q88 40 75 50" fill="#7F77DD" opacity=".92"/><text x="40" y="47" text-anchor="middle" font-size="14" font-weight="500" fill="white">'+rs+'</text></g><g id="p-right" style="transform:translateX(50px);transition:none"><path d="M88 10 L88 30 Q75 40 88 50 L88 70 L155 70 L155 10 Z" fill="#1D9E75" opacity=".92"/><text x="122" y="47" text-anchor="middle" font-size="14" font-weight="500" fill="white">'+conj+'</text></g>';ov.style.opacity='1';ov.style.transition='none';var pl=svg.querySelector('#p-left'),pr=svg.querySelector('#p-right');setTimeout(()=>{if(pl){pl.style.transition='transform .65s cubic-bezier(.34,1.56,.64,1)';pl.style.transform='translateX(0)';}if(pr){pr.style.transition='transform .65s cubic-bezier(.34,1.56,.64,1)';pr.style.transform='translateX(0)';}},40);setTimeout(()=>{ov.style.transition='opacity .7s ease';ov.style.opacity='0';},1600);}
 function launchConfetti(){var canvas=document.getElementById('confetti-canvas');canvas.width=window.innerWidth;canvas.height=window.innerHeight;var ctx=canvas.getContext('2d'),pieces=[],colors=['#7F77DD','#1D9E75','#EF9F27','#D4537E','#378ADD','#E24B4A'];for(var i=0;i<55;i++)pieces.push({x:Math.random()*canvas.width,y:-15+Math.random()*-30,vx:(Math.random()-.5)*4,vy:Math.random()*3+1.5,color:colors[Math.floor(Math.random()*colors.length)],r:Math.random()*4+2,rot:Math.random()*360,vrot:(Math.random()-.5)*6});var frames=0;function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);pieces.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.rot+=p.vrot;p.vy+=.08;var life=Math.max(0,1-frames/90);ctx.save();ctx.globalAlpha=life;ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);ctx.fillStyle=p.color;Math.random()>.5?ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r):(ctx.beginPath(),ctx.arc(0,0,p.r,0,Math.PI*2),ctx.fill());ctx.restore();});frames++;if(frames<90)requestAnimationFrame(draw);else ctx.clearRect(0,0,canvas.width,canvas.height);}draw();}
 function shDn(){clearInterval(tInt);tInt=null;stopBg();document.getElementById('game').style.display='none';document.getElementById('done').style.display='block';document.getElementById('pg').style.width='100%';var p=Math.round(cor/15*100),ind=getInd();document.getElementById('dsc').textContent=cor+'/15 '+ind.e;var msgs=[[100,'Perfect! \u5168\u90E8\u6B63\u89E3(\u305C\u3093\u3076\u305B\u3044\u304B\u3044)\uFF01\uD83C\uDF89'],[80,'Great! \u3088\u304F\u3067\u304D\u307E\u3057\u305F\uFF01'],[60,'Good! \u982D\u5F35(\u304C\u3093\u3070)\u308A\u307E\u3057\u305F\uFF01'],[0,'Keep practicing! \u7DF4\u7FD2(\u308C\u3093\u3057\u3085\u3046)\u3042\u308B\u306E\u307F\uFF01']];document.getElementById('dmg').textContent=msgs.find(m=>p>=m[0])[1];var db=document.getElementById('dbb');db.innerHTML='';aM.forEach(x=>{var d=document.createElement('div');d.className='bi';d.innerHTML=x.h+'<span class="ar">\u2192</span>'+x.te;db.appendChild(d);});cg={score:calcScore(),cor,err,ht,ind,time:fmtEl()};document.getElementById('lb-nr').style.display='block';document.getElementById('ninp').value='';loadLB();}
-async function loadLB(){try{var d=await fetch(API_BASE+'/api/scores');var j=await d.json();lb=j.scores||[];renderLB(-1);}catch(e){renderLB(-1);}}
+async function loadLB(){try{var d=await apiFetch('/api/scores');lb=d.scores||[];renderLB(-1);}catch(e){renderLB(-1);}}
 async function saveLB(){var n=(document.getElementById('ninp').value.trim()||'???').slice(0,8);try{await apiFetch('/api/scores',{method:'POST',body:JSON.stringify({name:n,correct:cg.cor,errors:cg.err,hints:cg.ht,timeSel:tSel,timeLeft:tLeft,time:cg.time})});document.getElementById('lb-nr').style.display='none';await loadLB();openM('lb');}catch(e){alert('Could not save score.');}}
 function renderLB(mi){var tb=document.getElementById('lbb');tb.innerHTML='';if(!lb.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;color:#aaa;padding:10px">No scores yet!</td></tr>';return;}lb.forEach((e,i)=>{var tr=document.createElement('tr');if(i===mi)tr.className='me';var indE=e.ind?.e||e.ind||'\u2014',indT=e.ind?.t||'';tr.innerHTML='<td>'+(i+1)+'</td><td><b>'+e.name+'</b></td><td>'+e.score+'pts ('+e.correct+'/15)</td><td><span class="ind-tip" title="'+indT+'">'+indE+'</span></td><td>'+(e.time||'\u2014')+'</td>';tb.appendChild(tr);});}
-(async function(){var ov=document.getElementById('boot-ov'),bm=document.getElementById('boot-msg'),bs=document.getElementById('boot-sub');var dots=0,dotsT=setInterval(function(){dots=(dots+1)%4;bs.textContent=String.fromCharCode(183).repeat(dots+1);},400);var warmT=setTimeout(function(){bm.textContent='Warming up server...';bs.textContent='Free tier - first load may take ~30s';clearInterval(dotsT);},5000);function hide(){clearTimeout(warmT);clearInterval(dotsT);ov.classList.add('fade');setTimeout(function(){ov.style.display='none';},500);}try{await _startSess();hide();init();}catch(e){clearTimeout(warmT);clearInterval(dotsT);bm.textContent='Could not connect';bs.textContent='Please reload the page';console.error(e);}})();
+(async function(){
+  var saved=localStorage.getItem('te_lang');
+  if(saved&&LANG[saved]){curLang=saved;document.getElementById('lang-sel').value=saved;}
+  var ov=document.getElementById('boot-ov'),bm=document.getElementById('boot-msg'),bs=document.getElementById('boot-sub');
+  var dots=0,dotsT=setInterval(function(){dots=(dots+1)%4;bs.textContent=String.fromCharCode(183).repeat(dots+1);},400);
+  var warmT=setTimeout(function(){bm.textContent='Warming up server...';bs.textContent='Free tier - first load may take ~30s';clearInterval(dotsT);},5000);
+  function hide(){clearTimeout(warmT);clearInterval(dotsT);ov.classList.add('fade');setTimeout(function(){ov.style.display='none';},500);}
+  try{await _startSess();hide();applyLang();init();}
+  catch(e){clearTimeout(warmT);clearInterval(dotsT);bm.textContent='Could not connect';bs.textContent='Please reload the page';console.error(e);}
+})();
 </script>
 </body>
 </html>
