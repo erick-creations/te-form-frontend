@@ -6,16 +6,18 @@
 <title>🎌 JLPT N5 — て-form Matching Game</title>
 <style>
 html{zoom:1.5}
+@media(max-width:480px){html{zoom:1}}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f8f7f4;color:#1a1a18;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:1.5rem 1rem}
 #app{width:100%;max-width:640px;position:relative}
-.titlerow{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem}
+.titlerow{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;flex-wrap:wrap;gap:6px}
 .gametitle{font-size:14px;font-weight:500;color:#3C3489}
 .titlebtns{display:flex;gap:5px;align-items:center}
 .tbtn{font-size:11px;padding:3px 9px;border-radius:7px;border:0.5px solid #ccc;background:transparent;color:#555;cursor:pointer}
 .tbtn:hover{background:#f0eeea}
 select.tbtn{-webkit-appearance:none;appearance:none;padding:3px 7px}
 .top{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:.8rem}
+@media(max-width:480px){.top{grid-template-columns:repeat(2,1fr)}.sc-p{grid-column:1/-1;display:flex;align-items:center;gap:10px;justify-content:space-between;padding:8px 12px}.sc-p .sv{font-size:14px}.sc-p .tsel{width:auto}}
 .sc{border-radius:8px;padding:8px 5px;text-align:center}
 .sc-g{background:#E1F5EE}.sc-r{background:#FCEBEB}.sc-y{background:#FAEEDA}.sc-b{background:#EAF3DE;cursor:pointer}.sc-b:hover{opacity:.85}.sc-p{background:#EEEDFE}
 .sv{font-size:15px;font-weight:500;color:#1a1a18;display:block}
