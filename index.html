@@ -118,8 +118,8 @@ footer{text-align:center;font-size:11px;color:#bbb;margin-top:1.5rem;padding-top
 .item.r-spec{background:#F0EFFF;border-color:#7F77DD}
 .item.r-spec .rm{color:#3C3489}
 .item.r-spec.ok{background:#F0EFFF;border-color:#7F77DD}
-.itr{font-size:10px;color:#888;display:none;margin-top:2px;line-height:1.3;cursor:default}
-.hb.tr{background:#E1F5EE;border-color:#1D9E75;color:#0D6E50}
+.itr{font-size:11px;color:#534AB7;text-align:center;line-height:1.3;font-style:italic}
+.flip-hint{font-size:8px;color:#ccc;margin-top:2px;letter-spacing:.03em;pointer-events:none}.ileft{perspective:300px;cursor:pointer;position:relative}.ileft-inner{position:relative;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.4,0,.2,1);min-height:46px;width:100%}.ileft-inner.flipped{transform:rotateY(180deg)}.ileft-front,.ileft-back{backface-visibility:hidden;-webkit-backface-visibility:hidden;position:absolute;top:0;left:0;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2px 0}.ileft-back{transform:rotateY(180deg)}
 </style>
 </head>
 <body>
@@ -153,7 +153,7 @@ footer{text-align:center;font-size:11px;color:#bbb;margin-top:1.5rem;padding-top
       <option value="th">🇹🇭 ไทย</option>
       <option value="vi">🇻🇳 VN</option>
     </select>
-    <select class="tbtn" id="top-sel" title="Verb pool size"></select><button class="tbtn" onclick="openM('te-rules')" data-i18n="btn_rules">📐 て Rules</button>
+    <div style="display:inline-flex;align-items:center;gap:3px;border:0.5px solid #ccc;border-radius:7px;padding:2px 6px;background:transparent"><span style="font-size:10px;color:#888">📚</span><select style="font-size:11px;border:none;background:transparent;color:#555;cursor:pointer;outline:none" id="top-sel" title="Verb pool size"></select><span style="font-size:10px;color:#aaa">verbs</span></div><button class="tbtn" onclick="openM('te-rules')" data-i18n="btn_rules">📐 て Rules</button>
     <button class="tbtn" id="mute-btn" onclick="toggleMute()">🔊</button>
   </div>
 </div>
@@ -270,7 +270,7 @@ const LANG={
     btn_next:'Next round →',btn_play_again:'🔄 Play again',btn_leaderboard:'🏅 Leaderboard',btn_close:'Close',
     htp_title:'❓ How to play / 遊(あそ)び方(かた)',htp_btn:'分(わ)かった！ Got it! 👍',
     htp_ul:'<li>Match each verb (left) to its て-form rule (right)</li><li>Rules show <b>...→て</b> — revealed only when ALL verbs in that group match</li><li><b>⚠</b> = Group 1 special. <b>✦</b> = Irregular verb</li><li><b>💡 Hint 1</b> = verb group. <b>💡 Hint 2</b> = example (after Hint 1)</li><li>Click <b>❓</b> on matched pairs for grammar explanation</li><li>Timer <b>pauses</b> when modals are open. Each round adds bonus time!</li>',
-    rules_title:'📐 All て-form rules',lb_title:'🏅 Leaderboard / リーダーボード',
+    rules_title:'📐 All て-form rules',rules_note_g2:'Group 2 — mora before る is い/え row (e.g. たべる、みる)',rules_note_mbn:'Group 1 nasal (e.g. のむ、あそぶ、しぬ)',rules_note_ku:'Group 1 (e.g. かく、きく)',rules_note_gu:'Group 1 voiced, partner of く (e.g. およぐ)',rules_note_su:'Group 1 (e.g. はなす、だす)',rules_note_utu:'Group 1 (e.g. かう、まつ、つかう)',rules_note_g1:'Group 1 — mora before る is あ/う/お row (e.g. とる、なる、つくる)',rules_note_iku:'⚠ Exception to く rule — only いく (to go)',rules_note_g1r:'⚠ Group 1 Special — looks like G2! (e.g. かえる、きる、はいる)',rules_note_suru:'Irregular (e.g. する、べんきょうする)',rules_note_kuru:'Irregular — reading changes く→き',flip_hint:'translate',lb_title:'🏅 Leaderboard / リーダーボード',
     lb_name_label:'Your name (8 chars max)',lb_name_ph:'Your name...',lb_save:'💾 Save my score',
     footer:'🎌 JLPT N5 て-form Game · © 2026 Ericsson Graciolli · All rights reserved',
     round:'🎌 Round {n} of 3 / 第(だい){n}ラウンド',select:'Select a verb 👈 then its rule 👉',
@@ -283,7 +283,7 @@ const LANG={
     btn_next:'Siguiente ronda →',btn_play_again:'🔄 Jugar de nuevo',btn_leaderboard:'🏅 Clasificación',btn_close:'Cerrar',
     htp_title:'❓ Cómo jugar / 遊(あそ)び方(かた)',htp_btn:'分(わ)かった！ ¡Entendido! 👍',
     htp_ul:'<li>Empareja cada verbo (izq.) con su regla て-form (der.)</li><li>Las reglas muestran <b>...→て</b> — reveladas solo cuando TODOS los verbos del grupo coinciden</li><li><b>⚠</b> = Grupo 1 especial. <b>✦</b> = Verbo irregular</li><li><b>💡 Pista 1</b> = grupo verbal. <b>💡 Pista 2</b> = ejemplo</li><li>Haz clic en <b>❓</b> para explicación gramatical</li><li>El temporizador se <b>pausa</b> con los modales abiertos. ¡Cada ronda añade tiempo bonus!</li>',
-    rules_title:'📐 Todas las reglas て-form',lb_title:'🏅 Clasificación / リーダーボード',
+    rules_title:'📐 Todas las reglas て-form',rules_note_g2:'Grupo 2 — mora antes de る es fila い/え (ej. たべる、みる)',rules_note_mbn:'Grupo 1 nasal (ej. のむ、あそぶ、しぬ)',rules_note_ku:'Grupo 1 (ej. かく、きく)',rules_note_gu:'Grupo 1 sonoro, par de く (ej. およぐ、いそぐ)',rules_note_su:'Grupo 1 (ej. はなす、だす)',rules_note_utu:'Grupo 1 (ej. かう、まつ)',rules_note_g1:'Grupo 1 — mora antes de る es fila あ/う/お (ej. とる、なる)',rules_note_iku:'⚠ Excepción a la regla く — solo いく (ir)',rules_note_g1r:'⚠ Grupo 1 Especial — ¡parece G2! (ej. かえる、きる)',rules_note_suru:'Irregular (ej. する)',rules_note_kuru:'Irregular — lectura cambia く→き',flip_hint:'traducir',lb_title:'🏅 Clasificación / リーダーボード',
     lb_name_label:'Tu nombre (máx. 8 caracteres)',lb_name_ph:'Tu nombre...',lb_save:'💾 Guardar puntuación',
     footer:'🎌 JLPT N5 て-form Game · © 2026 Ericsson Graciolli · Todos los derechos reservados',
     round:'🎌 Ronda {n} de 3 / 第(だい){n}ラウンド',select:'Selecciona un verbo 👈 y su regla 👉',
@@ -296,7 +296,7 @@ const LANG={
     btn_next:'Round successivo →',btn_play_again:'🔄 Gioca ancora',btn_leaderboard:'🏅 Classifica',btn_close:'Chiudi',
     htp_title:'❓ Come giocare / 遊(あそ)び方(かた)',htp_btn:'分(わ)かった！ Capito! 👍',
     htp_ul:'<li>Abbina ogni verbo (sinistra) alla sua regola て-form (destra)</li><li>Le regole mostrano <b>...→て</b> — rivelate quando TUTTI i verbi del gruppo corrispondono</li><li><b>⚠</b> = Gruppo 1 speciale. <b>✦</b> = Verbo irregolare</li><li><b>💡 Sugg. 1</b> = gruppo verbale. <b>💡 Sugg. 2</b> = esempio</li><li>Clicca <b>❓</b> per spiegazione grammaticale</li><li>Il timer si <b>mette in pausa</b> con i modali aperti. Ogni round aggiunge tempo bonus!</li>',
-    rules_title:'📐 Tutte le regole て-form',lb_title:'🏅 Classifica / リーダーボード',
+    rules_title:'📐 Tutte le regole て-form',rules_note_g2:'Gruppo 2 — mora prima di る è riga い/え (es. たべる、みる)',rules_note_mbn:'Gruppo 1 nasale (es. のむ、あそぶ、しぬ)',rules_note_ku:'Gruppo 1 (es. かく、きく)',rules_note_gu:'Gruppo 1 sonoro, coppia di く (es. およぐ)',rules_note_su:'Gruppo 1 (es. はなす)',rules_note_utu:'Gruppo 1 (es. かう、まつ)',rules_note_g1:'Gruppo 1 — mora prima di る è riga あ/う/お (es. とる、なる)',rules_note_iku:'⚠ Eccezione alla regola く — solo いく (andare)',rules_note_g1r:'⚠ Gruppo 1 Speciale — sembra G2! (es. かえる、きる)',rules_note_suru:'Irregolare (es. する)',rules_note_kuru:'Irregolare — lettura cambia く→き',flip_hint:'tradurre',lb_title:'🏅 Classifica / リーダーボード',
     lb_name_label:'Il tuo nome (max 8 caratteri)',lb_name_ph:'Il tuo nome...',lb_save:'💾 Salva il punteggio',
     footer:'🎌 JLPT N5 て-form Game · © 2026 Ericsson Graciolli · Tutti i diritti riservati',
     round:'🎌 Round {n} di 3 / 第(だい){n}ラウンド',select:'Seleziona un verbo 👈 poi la sua regola 👉',
@@ -309,7 +309,7 @@ const LANG={
     btn_next:'Próxima rodada →',btn_play_again:'🔄 Jogar de novo',btn_leaderboard:'🏅 Placar',btn_close:'Fechar',
     htp_title:'❓ Como jogar / 遊(あそ)び方(かた)',htp_btn:'分(わ)かった！ Entendido! 👍',
     htp_ul:'<li>Combine cada verbo (esq.) com sua regra て-form (dir.)</li><li>As regras mostram <b>...→て</b> — reveladas só quando TODOS os verbos do grupo combinarem</li><li><b>⚠</b> = Grupo 1 especial. <b>✦</b> = Verbo irregular</li><li><b>💡 Dica 1</b> = grupo verbal. <b>💡 Dica 2</b> = exemplo</li><li>Clique em <b>❓</b> para explicação gramatical</li><li>O timer <b>pausa</b> com modais abertos. Cada rodada adiciona tempo bônus!</li>',
-    rules_title:'📐 Todas as regras て-form',lb_title:'🏅 Placar / リーダーボード',
+    rules_title:'📐 Todas as regras て-form',rules_note_g2:'Grupo 2 — mora antes de る é fileira い/え (ex. たべる、みる)',rules_note_mbn:'Grupo 1 nasal (ex. のむ、あそぶ、しぬ)',rules_note_ku:'Grupo 1 (ex. かく、きく)',rules_note_gu:'Grupo 1 sonoro, par de く (ex. およぐ、いそぐ)',rules_note_su:'Grupo 1 (ex. はなす、だす)',rules_note_utu:'Grupo 1 (ex. かう、まつ、つかう)',rules_note_g1:'Grupo 1 — mora antes de る é fileira あ/う/お (ex. とる、なる)',rules_note_iku:'⚠ Exceção à regra く — só いく (ir)',rules_note_g1r:'⚠ Grupo 1 Especial — parece G2! (ex. かえる、きる、はいる)',rules_note_suru:'Irregular (ex. する、べんきょうする)',rules_note_kuru:'Irregular — leitura muda く→き',flip_hint:'traduzir',lb_title:'🏅 Placar / リーダーボード',
     lb_name_label:'Seu nome (máx. 8 caracteres)',lb_name_ph:'Seu nome...',lb_save:'💾 Salvar pontuação',
     footer:'🎌 JLPT N5 て-form Game · © 2026 Ericsson Graciolli · Todos os direitos reservados',
     round:'🎌 Rodada {n} de 3 / 第(だい){n}ラウンド',select:'Selecione um verbo 👈 e sua regra 👉',
@@ -322,7 +322,7 @@ const LANG={
     btn_next:'Ronde suivante →',btn_play_again:'🔄 Rejouer',btn_leaderboard:'🏅 Classement',btn_close:'Fermer',
     htp_title:'❓ Comment jouer / 遊(あそ)び方(かた)',htp_btn:'分(わ)かった！ Compris ! 👍',
     htp_ul:'<li>Associez chaque verbe (gauche) à sa règle て-form (droite)</li><li>Les règles affichent <b>...→て</b> — révélées quand TOUS les verbes du groupe sont associés</li><li><b>⚠</b> = Groupe 1 spécial. <b>✦</b> = Verbe irrégulier</li><li><b>💡 Indice 1</b> = groupe verbal. <b>💡 Indice 2</b> = exemple</li><li>Cliquez sur <b>❓</b> pour une explication grammaticale</li><li>Le minuteur se <b>met en pause</b> avec les modales ouvertes. Chaque ronde ajoute du temps bonus !</li>',
-    rules_title:'📐 Toutes les règles て-form',lb_title:'🏅 Classement / リーダーボード',
+    rules_title:'📐 Toutes les règles て-form',rules_note_g2:'Groupe 2 — mora avant る est rangée い/え (ex. たべる、みる)',rules_note_mbn:'Groupe 1 nasal (ex. のむ、あそぶ、しぬ)',rules_note_ku:'Groupe 1 (ex. かく、きく)',rules_note_gu:'Groupe 1 voisé, pair de く (ex. およぐ)',rules_note_su:'Groupe 1 (ex. はなす)',rules_note_utu:'Groupe 1 (ex. かう、まつ)',rules_note_g1:'Groupe 1 — mora avant る est rangée あ/う/お (ex. とる、なる)',rules_note_iku:'⚠ Exception à la règle く — seulement いく (aller)',rules_note_g1r:'⚠ Groupe 1 Spécial — ressemble au G2! (ex. かえる、きる)',rules_note_suru:'Irrégulier (ex. する)',rules_note_kuru:'Irrégulier — lecture change く→き',flip_hint:'traduire',lb_title:'🏅 Classement / リーダーボード',
     lb_name_label:'Votre nom (8 caractères max)',lb_name_ph:'Votre nom...',lb_save:'💾 Sauvegarder le score',
     footer:'🎌 JLPT N5 て-form Game · © 2026 Ericsson Graciolli · Tous droits réservés',
     round:'🎌 Ronde {n} sur 3 / 第(だい){n}ラウンド',select:'Sélectionnez un verbe 👈 puis sa règle 👉',
@@ -335,7 +335,7 @@ const LANG={
     btn_next:'下一回合 →',btn_play_again:'🔄 再玩一次',btn_leaderboard:'🏅 排行榜',btn_close:'關閉',
     htp_title:'❓ 遊戲說明 / 遊(あそ)び方(かた)',htp_btn:'分(わ)かった！ 明白了！👍',
     htp_ul:'<li>將每個動詞（左）與其て形規則（右）配對</li><li>規則顯示<b>...→て</b>——所有動詞配對後才顯示</li><li><b>⚠</b> = 第1組特殊。<b>✦</b> = 不規則動詞</li><li><b>💡 提示1</b> = 動詞組。<b>💡 提示2</b> = 例子</li><li>點擊已配對的<b>❓</b>查看語法說明</li><li>模態框開啟時計時器<b>暫停</b>。每回合增加獎勵時間！</li>',
-    rules_title:'📐 所有て形規則',lb_title:'🏅 排行榜 / リーダーボード',
+    rules_title:'📐 所有て形規則',rules_note_g2:'第2類 — る前的假名是い/え行（如 たべる、みる）',rules_note_mbn:'第1類鼻音（如 のむ、あそぶ、しぬ）',rules_note_ku:'第1類（如 かく、きく）',rules_note_gu:'第1類濁音，く的對應（如 およぐ）',rules_note_su:'第1類（如 はなす）',rules_note_utu:'第1類（如 かう、まつ）',rules_note_g1:'第1類 — る前是あ/う/お行（如 とる、なる）',rules_note_iku:'⚠ く規則例外 — 只有いく（去）',rules_note_g1r:'⚠ 第1類特殊 — 看起來像第2類！（如 かえる、きる）',rules_note_suru:'不規則（如 する）',rules_note_kuru:'不規則 — 讀音變化く→き',flip_hint:'翻譯',lb_title:'🏅 排行榜 / リーダーボード',
     lb_name_label:'您的名字（最多8個字元）',lb_name_ph:'您的名字...',lb_save:'💾 儲存分數',
     footer:'🎌 JLPT N5 て-form Game · © 2026 Ericsson Graciolli · 版權所有',
     round:'🎌 第{n}回合 共3回合 / 第(だい){n}ラウンド',select:'選擇動詞 👈 再選規則 👉',
@@ -348,7 +348,7 @@ const LANG={
     btn_next:'다음 라운드 →',btn_play_again:'🔄 다시 플레이',btn_leaderboard:'🏅 리더보드',btn_close:'닫기',
     htp_title:'❓ 게임 방법 / 遊(あそ)び方(かた)',htp_btn:'分(わ)かった！ 알겠어요! 👍',
     htp_ul:'<li>각 동사(왼쪽)를 て형 규칙(오른쪽)에 매칭하세요</li><li>규칙은 <b>...→て</b>를 표시 — 그룹의 모든 동사가 매칭될 때 공개됩니다</li><li><b>⚠</b> = 1그룹 특수. <b>✦</b> = 불규칙 동사</li><li><b>💡 힌트 1</b> = 동사 그룹. <b>💡 힌트 2</b> = 예시</li><li>매칭된 쌍의 <b>❓</b>를 클릭하면 문법 설명이 나옵니다</li><li>모달이 열리면 타이머가 <b>일시정지</b>됩니다. 매 라운드마다 보너스 시간 추가!</li>',
-    rules_title:'📐 て형 모든 규칙',lb_title:'🏅 리더보드 / リーダーボード',
+    rules_title:'📐 て형 모든 규칙',rules_note_g2:'2그룹 — る 앉 모라가 い/え 행 (예: たべる、みる)',rules_note_mbn:'1그룹 비음 (예: のむ、あそぶ、しぬ)',rules_note_ku:'1그룹 (예: かく、きく)',rules_note_gu:'1그룹 유성음, く의 짝 (예: およぐ)',rules_note_su:'1그룹 (예: はなす)',rules_note_utu:'1그룹 (예: かう、まつ)',rules_note_g1:'1그룹 — る 앉이 あ/う/お 행 (예: とる、なる)',rules_note_iku:'⚠ く 규칙 예외 — いく(가다)만',rules_note_g1r:'⚠ 1그룹 특수 — 2그룹체럼 보임! (예: かえる、きる)',rules_note_suru:'불규칙 (예: する)',rules_note_kuru:'불규칙 — 읽기 변화 く→き',flip_hint:'번역',lb_title:'🏅 리더보드 / リーダーボード',
     lb_name_label:'이름 (최대 8자)',lb_name_ph:'이름...',lb_save:'💾 점수 저장',
     footer:'🎌 JLPT N5 て-form Game · © 2026 Ericsson Graciolli · All rights reserved',
     round:'🎌 {n}라운드 / 3 / 第(だい){n}ラウンド',select:'동사 선택 👈 후 규칙 선택 👉',
@@ -361,7 +361,7 @@ const LANG={
     btn_next:'次のラウンド →',btn_play_again:'🔄 もう一度',btn_leaderboard:'🏅 ランキング',btn_close:'閉じる',
     htp_title:'❓ 遊び方',htp_btn:'分(わ)かった！👍',
     htp_ul:'<li>動詞（左）をて形ルール（右）と対応させてください</li><li>ルールは<b>...→て</b>を表示 — グループの全動詞がマッチしたときのみ公開</li><li><b>⚠</b> = 1グループ特殊。<b>✦</b> = 不規則動詞</li><li><b>💡 ヒント1</b> = 動詞グループ。<b>💡 ヒント2</b> = 例文</li><li>マッチしたペアの<b>❓</b>をクリックして文法説明を確認</li><li>モーダルが開いているとタイマーが<b>一時停止</b>します。各ラウンドでボーナス時間が追加！</li>',
-    rules_title:'📐 て形ルール一覧',lb_title:'🏅 ランキング',
+    rules_title:'📐 て形ルール一覧',rules_note_g2:'二段動詞 — るの前はい段・え段（例：たべる、みる）',rules_note_mbn:'五段・撥音便（例：のむ、あそぶ、しぬ）',rules_note_ku:'五段・く行（例：かく、きく）',rules_note_gu:'五段・ぐ行（例：およぐ、いそぐ）',rules_note_su:'五段・す行（例：はなす）',rules_note_utu:'五段・う行・つ行（例：かう、まつ）',rules_note_g1:'五段・る（明確）— るの前はあ・う・お段（例：とる、なる）',rules_note_iku:'⚠ く行の例外 — いく（行く）のみ',rules_note_g1r:'⚠ 五段・る（注意！）— 一段に見えるが五段！（例：かえる、きる）',rules_note_suru:'不規則動詞（例：する）',rules_note_kuru:'不規則動詞 — 読み変化：く→き',flip_hint:'翻訳',lb_title:'🏅 ランキング',
     lb_name_label:'名前（8文字まで）',lb_name_ph:'名前...',lb_save:'💾 スコアを保存',
     footer:'🎌 JLPT N5 て形ゲーム · © 2026 Ericsson Graciolli · All rights reserved',
     round:'🎌 第(だい){n}ラウンド（全3回）',select:'動詞を選んで 👈 ルールを選ぼう 👉',
@@ -374,7 +374,7 @@ const LANG={
     btn_next:'รอบถัดไป →',btn_play_again:'🔄 เล่นอีกครั้ง',btn_leaderboard:'🏅 ลีดเดอร์บอร์ด',btn_close:'ปิด',
     htp_title:'❓ วิธีเล่น / 遊(あそ)び方(かた)',htp_btn:'分(わ)かった！ เข้าใจแล้ว! 👍',
     htp_ul:'<li>จับคู่กริยาแต่ละตัว (ซ้าย) กับกฎ て-form (ขวา)</li><li>กฎแสดง <b>...→て</b> — เผยเมื่อกริยาทั้งหมดในกลุ่มถูกจับคู่</li><li><b>⚠</b> = กลุ่ม 1 พิเศษ. <b>✦</b> = กริยาผิดปกติ</li><li><b>💡 คำใบ้ 1</b> = กลุ่มกริยา. <b>💡 คำใบ้ 2</b> = ตัวอย่าง</li><li>คลิก <b>❓</b> บนคู่ที่จับแล้วเพื่ออธิบายไวยากรณ์</li><li>ตัวจับเวลา<b>หยุดชั่วคราว</b>เมื่อโมดัลเปิดอยู่ แต่ละรอบเพิ่มเวลาโบนัส!</li>',
-    rules_title:'📐 กฎ て-form ทั้งหมด',lb_title:'🏅 ลีดเดอร์บอร์ด / リーダーボード',
+    rules_title:'📐 กฎ て-form ทั้งหมด',rules_note_g2:'กลุ่ม 2 — mora ก่อน る คือแถว い/え (เช่น たべる、みる)',rules_note_mbn:'กลุ่ม 1 นาสัล (เช่น のむ、あそぶ、しぬ)',rules_note_ku:'กลุ่ม 1 (เช่น かく、きく)',rules_note_gu:'กลุ่ม 1 เสียงก้อง คู่กับ く (เช่น およぐ)',rules_note_su:'กลุ่ม 1 (เช่น はなす)',rules_note_utu:'กลุ่ม 1 (เช่น かう、まつ)',rules_note_g1:'กลุ่ม 1 — mora ก่อน る คือแถว あ/う/お (เช่น とる、なる)',rules_note_iku:'⚠ ข้อยกเว้น く — เฉพาะ いく (ไป)',rules_note_g1r:'⚠ กลุ่ม 1 พิเศษ — ดูเหมือนกลุ่ม 2! (เช่น かえる、きる)',rules_note_suru:'กริยาผิดปกติ (เช่น する)',rules_note_kuru:'กริยาผิดปกติ — การอ่านเปลี่ยน く→き',flip_hint:'แปล',lb_title:'🏅 ลีดเดอร์บอร์ด / リーダーボード',
     lb_name_label:'ชื่อของคุณ (สูงสุด 8 ตัวอักษร)',lb_name_ph:'ชื่อของคุณ...',lb_save:'💾 บันทึกคะแนน',
     footer:'🎌 JLPT N5 て-form Game · © 2026 Ericsson Graciolli · All rights reserved',
     round:'🎌 รอบที่ {n} จาก 3 / 第(だい){n}ラウンド',select:'เลือกกริยา 👈 แล้วเลือกกฎ 👉',
@@ -387,7 +387,7 @@ const LANG={
     btn_next:'Vòng tiếp theo →',btn_play_again:'🔄 Chơi lại',btn_leaderboard:'🏅 Bảng xếp hạng',btn_close:'Đóng',
     htp_title:'❓ Cách chơi / 遊(あそ)び方(かた)',htp_btn:'分(わ)かった！ Hiểu rồi! 👍',
     htp_ul:'<li>Ghép mỗi động từ (trái) với quy tắc て-form (phải)</li><li>Quy tắc hiển thị <b>...→て</b> — chỉ hiện khi TẤT CẢ động từ trong nhóm được ghép</li><li><b>⚠</b> = Nhóm 1 đặc biệt. <b>✦</b> = Động từ bất quy tắc</li><li><b>💡 Gợi ý 1</b> = nhóm động từ. <b>💡 Gợi ý 2</b> = ví dụ</li><li>Nhấp <b>❓</b> trên các cặp đã ghép để xem giải thích ngữ pháp</li><li>Đồng hồ <b>tạm dừng</b> khi cửa sổ đang mở. Mỗi vòng thêm thời gian thưởng!</li>',
-    rules_title:'📐 Tất cả quy tắc て-form',lb_title:'🏅 Bảng xếp hạng / リーダーボード',
+    rules_title:'📐 Tất cả quy tắc て-form',rules_note_g2:'Nhóm 2 — mora trước る là hàng い/え (vd. たべる、みる)',rules_note_mbn:'Nhóm 1 mũi (vd. のむ、あそぶ、しぬ)',rules_note_ku:'Nhóm 1 (vd. かく、きく)',rules_note_gu:'Nhóm 1 hữu thanh, cặp của く (vd. およぐ)',rules_note_su:'Nhóm 1 (vd. はなす)',rules_note_utu:'Nhóm 1 (vd. かう、まつ)',rules_note_g1:'Nhóm 1 — mora trước る là hàng あ/う/お (vd. とる、なる)',rules_note_iku:'⚠ Ngoại lệ của く — chỉ いく (đi)',rules_note_g1r:'⚠ Nhóm 1 Đặc biệt — trông như nhóm 2! (vd. かえる、きる)',rules_note_suru:'Bất quy tắc (vd. する)',rules_note_kuru:'Bất quy tắc — đọc thay đổi く→き',flip_hint:'dịch',lb_title:'🏅 Bảng xếp hạng / リーダーボード',
     lb_name_label:'Tên của bạn (tối đa 8 ký tự)',lb_name_ph:'Tên của bạn...',lb_save:'💾 Lưu điểm',
     footer:'🎌 JLPT N5 て-form Game · © 2026 Ericsson Graciolli · All rights reserved',
     round:'🎌 Vòng {n}/3 / 第(だい){n}ラウンド',select:'Chọn động từ 👈 rồi quy tắc 👉',
@@ -418,8 +418,8 @@ function _fp(){return{screen:screen.width+'x'+screen.height,tz:Intl.DateTimeForm
 async function _startSess(){var r=await fetch(API_BASE+'/session/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(_fp())});if(!r.ok)throw new Error('Session failed:'+r.status);var d=await r.json();_tok=d.token;_tokExp=Date.now()+d.expiresIn*1000;_sessOk=true;}
 async function apiFetch(path,opts){opts=opts||{};if(!_sessOk)await _startSess();var r=await fetch(API_BASE+path,Object.assign({},opts,{headers:Object.assign({'Content-Type':'application/json','Authorization':'Bearer '+_tok},opts.headers||{})}));if(r.status===401){var e={};try{e=await r.clone().json();}catch(x){}if(e.code==='EXPIRED'||e.code==='NO_SESSION'){_sessOk=false;await _startSess();r=await fetch(API_BASE+path,Object.assign({},opts,{headers:Object.assign({'Content-Type':'application/json','Authorization':'Bearer '+_tok},opts.headers||{})}));}}if(!r.ok)throw new Error('API error:'+r.status);return r.json();}
 // RULES
-const ALL_RULES=[{r:'る→て',hid:'...→て',gs:['g2'],col:''},{r:'む・ぶ・ぬ→んで',hid:'...→んで',gs:['mu','bu','nu'],col:''},{r:'く→いて',hid:'...→いて',gs:['ku'],col:''},{r:'す→して',hid:'...→して',gs:['su'],col:''},{r:'う・つ→って',hid:'...→って',gs:['u','tsu'],col:''},{r:'る→って ⚠',hid:'...→って <span class="sym" title="⚠ Group 1 Special: ends in る but is NOT Group 2!">⚠</span>',gs:['g1r'],col:'warn'},{r:'いく→いって ⚠',hid:'...→いって <span class="sym" title="⚠ Exception: いく is く-verb but て-form is いって, not いいて!">⚠</span>',gs:['iku'],col:'warn'},{r:'ぐ→いで',hid:'...→いで',gs:['gu'],col:''},{r:'する→して ✦',hid:'...→して <span class="sym" title="✦ Irregular verb — memorize!">✦</span>',gs:['suru'],col:'spec'},{r:'くる→きて ✦',hid:'...→きて <span class="sym" title="✦ Irregular verb — memorize!">✦</span>',gs:['kuru'],col:'spec'}];
-const RULE_EXP={'\u308b\u2192\u3066':'<p><b>Rule: \u308b \u2192 \u3066 (Group 2)</b></p><p>Applies when syllable before \u308b is from \u3044/\u3048 row. E.g. \u305f\u3079\u308b, \u307f\u308b, \u304a\u304d\u308b, \u306d\u308b.</p>','む・ぶ・ぬ→んで':'<p><b>Rule: む/ぶ/ぬ → んで (Group 1)</b></p><p>む-ending: のむ, よむ, すむ. ぶ-ending: あそぶ, よぶ. ぬ-ending: しぬ (the only N5 ぬ verb!). All three produce んで!</p>','\u304f\u2192\u3044\u3066':'<p><b>Rule: \u304f \u2192 \u3044\u3066 (Group 1)</b></p><p>Sound change. E.g. \u304b\u304f, \u304d\u304f, \u3042\u308b\u304f. \u26a0 Exception: \u3044\u304f\u2192\u3044\u3063\u3066.</p>','\u3059\u2192\u3057\u3066':'<p><b>Rule: \u3059 \u2192 \u3057\u3066 (Group 1)</b></p><p>Only \u3059 produces \u3057\u3066! E.g. \u306f\u306a\u3059, \u304b\u3059, \u3051\u3059.</p>','\u3046\u30fb\u3064\u2192\u3063\u3066':'<p><b>Rule: \u3046/\u3064 \u2192 \u3063\u3066 (Group 1)</b></p><p>\u3046-ending: \u304b\u3046, \u3044\u3046, \u3064\u304b\u3046, \u3042\u3046. \u3064-ending: \u307e\u3064, \u305f\u3064, \u3082\u3064. Both use \u3063\u3066!</p>','\u308b\u2192\u3063\u3066 \u26a0':'<p><b>Rule: \u308b \u2192 \u3063\u3066 \u26a0 (Group 1 Special!)</b></p><p>Looks like Group 2 but isn\'t! Memorize: \u5e30(\u304b\u3048)\u308b, \u5207(\u304d)\u308b, \u8d70(\u306f\u3057)\u308b, \u77e5(\u3057)\u308b, \u5165(\u306f\u3044)\u308b.</p>','ぐ→いで':'<p><b>Rule: ぐ → いで (Group 1)</b></p><p>Voiced partner of く→いて. E.g. およぐ, いそぐ.</p>','いく→いって ⚠':'<p><b>⚠ Exception: いく → いって (Group 1)</b></p><p>いく is a く verb, but て-form is いって (NOT いいて!). This is the only く exception at N5 level. Memorize: 行(い)く → 行(い)って.</p>','\u3059\u308b\u2192\u3057\u3066 \u2726':'<p><b>Rule: \u3059\u308b \u2192 \u3057\u3066 (Irregular \u2726)</b></p><p>Applies to \u3059\u308b and compound verbs: \u3079\u3093\u304d\u3087\u3046\u3059\u308b, \u308a\u3087\u3046\u308a\u3059\u308b...</p>','\u304f\u308b\u2192\u304d\u3066 \u2726':'<p><b>Rule: \u304f\u308b \u2192 \u304d\u3066 (Irregular \u2726)</b></p><p>Only \u6765(\u304f)\u308b uses this. Reading changes: \u304f\u2192\u304d!</p>'};
+const ALL_RULES=[{r:'る→て',hid:'...→て',gs:['g2'],col:''},{r:'む・ぶ・ぬ→んで',hid:'...→んで',gs:['mu','bu','nu'],col:''},{r:'く→いて',hid:'...→いて',gs:['ku'],col:''},{r:'す→して',hid:'...→して',gs:['su'],col:''},{r:'う・つ→って',hid:'...→って',gs:['u','tsu'],col:''},{r:'る→って',hid:'...→って',gs:['g1'],col:''},{r:'る→って ⚠',hid:'...→って <span class="sym" title="⚠ Group 1 Special: ends in る but is NOT Group 2!">⚠</span>',gs:['g1r'],col:'warn'},{r:'いく→いって ⚠',hid:'...→いって <span class="sym" title="⚠ Exception: いく is く-verb but て-form is いって, not いいて!">⚠</span>',gs:['iku'],col:'warn'},{r:'ぐ→いで',hid:'...→いで',gs:['gu'],col:''},{r:'する→して ✦',hid:'...→して <span class="sym" title="✦ Irregular verb — memorize!">✦</span>',gs:['suru'],col:'spec'},{r:'くる→きて ✦',hid:'...→きて <span class="sym" title="✦ Irregular verb — memorize!">✦</span>',gs:['kuru'],col:'spec'}];
+const RULE_EXP={'\u308b\u2192\u3066':'<p><b>Rule: \u308b \u2192 \u3066 (Group 2)</b></p><p>Applies when syllable before \u308b is from \u3044/\u3048 row. E.g. \u305f\u3079\u308b, \u307f\u308b, \u304a\u304d\u308b, \u306d\u308b.</p>','む・ぶ・ぬ→んで':'<p><b>Rule: む/ぶ/ぬ → んで (Group 1)</b></p><p>む-ending: のむ, よむ, すむ. ぶ-ending: あそぶ, よぶ. ぬ-ending: しぬ (the only N5 ぬ verb!). All three produce んで!</p>','\u304f\u2192\u3044\u3066':'<p><b>Rule: \u304f \u2192 \u3044\u3066 (Group 1)</b></p><p>Sound change. E.g. \u304b\u304f, \u304d\u304f, \u3042\u308b\u304f. \u26a0 Exception: \u3044\u304f\u2192\u3044\u3063\u3066.</p>','\u3059\u2192\u3057\u3066':'<p><b>Rule: \u3059 \u2192 \u3057\u3066 (Group 1)</b></p><p>Only \u3059 produces \u3057\u3066! E.g. \u306f\u306a\u3059, \u304b\u3059, \u3051\u3059.</p>','\u3046\u30fb\u3064\u2192\u3063\u3066':'<p><b>Rule: \u3046/\u3064 \u2192 \u3063\u3066 (Group 1)</b></p><p>\u3046-ending: \u304b\u3046, \u3044\u3046, \u3064\u304b\u3046, \u3042\u3046. \u3064-ending: \u307e\u3064, \u305f\u3064, \u3082\u3064. Both use \u3063\u3066!</p>','る→って':'<p><b>Rule: る → って (Group 1, Obvious)</b></p><p>The mora before る comes from the あ/う/お row — clearly NOT ichidan.</p><p>Examples: とる→とって, なる→なって, つくる→つくって, ある→あって.</p>','\u308b\u2192\u3063\u3066 \u26a0':'<p><b>Rule: \u308b \u2192 \u3063\u3066 \u26a0 (Group 1 Special!)</b></p><p>Looks like Group 2 but isn\'t! Memorize: \u5e30(\u304b\u3048)\u308b, \u5207(\u304d)\u308b, \u8d70(\u306f\u3057)\u308b, \u77e5(\u3057)\u308b, \u5165(\u306f\u3044)\u308b.</p>','ぐ→いで':'<p><b>Rule: ぐ → いで (Group 1)</b></p><p>Voiced partner of く→いて. E.g. およぐ, いそぐ.</p>','いく→いって ⚠':'<p><b>⚠ Exception: いく → いって (Group 1)</b></p><p>いく is a く verb, but て-form is いって (NOT いいて!). This is the only く exception at N5 level. Memorize: 行(い)く → 行(い)って.</p>','\u3059\u308b\u2192\u3057\u3066 \u2726':'<p><b>Rule: \u3059\u308b \u2192 \u3057\u3066 (Irregular \u2726)</b></p><p>Applies to \u3059\u308b and compound verbs: \u3079\u3093\u304d\u3087\u3046\u3059\u308b, \u308a\u3087\u3046\u308a\u3059\u308b...</p>','\u304f\u308b\u2192\u304d\u3066 \u2726':'<p><b>Rule: \u304f\u308b \u2192 \u304d\u3066 (Irregular \u2726)</b></p><p>Only \u6765(\u304f)\u308b uses this. Reading changes: \u304f\u2192\u304d!</p>'};
 // STATE
 var allVerbs=[],rds=[],ri=0,cor=0,err=0,ht=0;var teTop=parseInt(localStorage.getItem('te_top')||'80')||80;
 var sL=null,sR=null,mat=0,aM=[],hs={},wrongPairs=[];
@@ -461,18 +461,19 @@ function fmtEl(){if(tSel<=0)return'\u2014';return fmt(Math.max(0,tSel-tLeft));}
 function buildTeRules(){
   var b=document.getElementById('te-rules-body');b.innerHTML='';
   var regular=[
-    {ends:'る',result:'て',color:'#1D9E75',note:'Group 2 — syllable before る is い/え row (e.g. たべる、みる、おきる)'},
-    {ends:'む・ぶ・ぬ',result:'んで',color:'#1a1a18',note:'Group 1 nasal ending (e.g. のむ、あそぶ、しぬ)'},
-    {ends:'く',result:'いて',color:'#1a1a18',note:'Group 1 (e.g. かく、きく)'},
-    {ends:'ぐ',result:'いで',color:'#1a1a18',note:'Group 1 voiced — partner of く (e.g. およぐ、いそぐ)'},
-    {ends:'す',result:'して',color:'#1a1a18',note:'Group 1 (e.g. はなす、かす、けす)'},
-    {ends:'う・つ',result:'って',color:'#1a1a18',note:'Group 1 (e.g. かう、まつ、つかう)'},
+    {ends:'る',result:'て',color:'#1D9E75',note:t('rules_note_g2')},
+    {ends:'む・ぶ・ぬ',result:'んで',color:'#1a1a18',note:t('rules_note_mbn')},
+    {ends:'く',result:'いて',color:'#1a1a18',note:t('rules_note_ku')},
+    {ends:'ぐ',result:'いで',color:'#1a1a18',note:t('rules_note_gu')},
+    {ends:'す',result:'して',color:'#1a1a18',note:t('rules_note_su')},
+    {ends:'う・つ',result:'って',color:'#1a1a18',note:t('rules_note_utu')},
+    {ends:'る',result:'って',color:'#7A4500',note:t('rules_note_g1')},
   ];
   var special=[
-    {ends:'いく',result:'いって',color:'#854F0B',note:'⚠ Exception to く rule (to go)'},
-    {ends:'る ⚠',result:'って',color:'#854F0B',note:'⚠ Group 1 Special — looks like G2! (e.g. かえる、きる、はしる)'},
-    {ends:'する ✦',result:'して',color:'#534AB7',note:'Irregular (to do) + compound verbs: べんきょうする…'},
-    {ends:'くる ✦',result:'きて',color:'#534AB7',note:'Irregular (to come) — reading changes: く→き'},
+    {ends:'いく',result:'いって',color:'#854F0B',note:t('rules_note_iku')},
+    {ends:'る ⚠',result:'って',color:'#854F0B',note:t('rules_note_g1r')},
+    {ends:'する ✦',result:'して',color:'#534AB7',note:t('rules_note_suru')},
+    {ends:'くる ✦',result:'きて',color:'#534AB7',note:t('rules_note_kuru')},
   ];
   function makeRow(g){
     var d=document.createElement('div');d.className='rule-row';
@@ -518,12 +519,12 @@ function loadR(){
   var cl=document.getElementById('cl'),cr=document.getElementById('cr');cl.innerHTML='';cr.innerHTML='';
   sf(vs).forEach(v=>{
     hs[v.h]=0;var el=document.createElement('div');el.className='item';el.dataset.g=v.g;el.dataset.h=v.h;el.dataset.te=v.te;
-    var il=document.createElement('div');il.className='ileft';il.innerHTML='<span class="ih">'+v.h+'</span><span class="ik">'+v.k+'</span><span class="itr"></span>';
-    var hc=document.createElement('div');hc.className='hcol';var b1=document.createElement('div'),b2=document.createElement('div');
+    var il=document.createElement('div');il.className='ileft';il.innerHTML='<div class="ileft-inner"><div class="ileft-front"><span class="ih">'+v.h+'</span><span class="ik">'+v.k+'</span><span class="flip-hint">↻ '+t('flip_hint')+'</span></div><div class="ileft-back"><span class="itr"></span></div></div>';
+    il.onclick=function(e){e.stopPropagation();var inner=il.querySelector('.ileft-inner');var trEl=il.querySelector('.itr');var lang=curLang||'en';trEl.textContent=(v.tr&&(v.tr[lang]||v.tr.en))||'';inner.classList.toggle('flipped');if(inner.classList.contains('flipped')){clearTimeout(inner._ft);inner._ft=setTimeout(function(){inner.classList.remove('flipped');},2500);}};var hc=document.createElement('div');hc.className='hcol';var b1=document.createElement('div'),b2=document.createElement('div');
     b1.className='hb';b1.dataset.hint='1';b1.textContent=t('hint1_lbl');b2.className='hb lk';b2.dataset.hint='2';b2.textContent=t('hint2_lbl');
     b1.onclick=e=>{e.stopPropagation();if(b1.classList.contains('ud'))return;if(hs[v.h]<1){hs[v.h]=1;ht++;document.getElementById('sh').textContent=ht;updSI();}b1.classList.add('ud','y');b2.classList.remove('lk');setF('h1','\uD83D\uDCA1 '+v.gn+' / '+v.gj);};
     b2.onclick=e=>{e.stopPropagation();if(b2.classList.contains('lk')||b2.classList.contains('ud'))return;if(hs[v.h]<2){hs[v.h]=2;ht++;document.getElementById('sh').textContent=ht;updSI();}b2.classList.add('ud','v');setF('h2','\uD83D\uDCA1 e.g. '+v.ex);};
-    var b3=document.createElement('div');b3.className='hb tr';b3.textContent='🔤';b3.title='Show meaning';b3.onclick=e=>{e.stopPropagation();var trd=v.tr||{};var lang=curLang||'en';var meaning=trd[lang]||trd['en']||'';var trEl=el.querySelector('.itr');if(trEl){trEl.style.display=trEl.style.display==='none'?'block':'none';if(trEl.style.display==='block')trEl.textContent=meaning;}};hc.appendChild(b1);hc.appendChild(b2);hc.appendChild(b3);el.appendChild(il);el.appendChild(hc);el.onclick=()=>selL(el);cl.appendChild(el);
+    hc.appendChild(b1);hc.appendChild(b2);el.appendChild(il);el.appendChild(hc);el.onclick=()=>selL(el);cl.appendChild(el);
   });
   sf(rs).forEach(r=>{var el=document.createElement('div');el.className='item'+(r.col==='warn'?' r-warn':r.col==='spec'?' r-spec':'');el.dataset.gs=JSON.stringify(r.gs);el.dataset.r=r.r;el.innerHTML='<span class="rm">'+r.hid+'</span>';el.onclick=()=>selR(el);cr.appendChild(el);});
 }
